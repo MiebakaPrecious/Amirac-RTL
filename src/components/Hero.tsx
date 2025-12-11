@@ -12,13 +12,13 @@ const Hero = () => {
           {/* Left Content */}
           <div className="max-w-xl">
             <h1 className="font-heading font-bold leading-none mb-6">
-              <span className="block text-6xl md:text-7xl lg:text-8xl text-primary">START</span>
-              <span className="block text-6xl md:text-7xl lg:text-8xl text-primary">NEW</span>
-              <span className="block text-6xl md:text-7xl lg:text-8xl text-accent">PROJECTS</span>
+              <span className="block text-6xl md:text-7xl lg:text-8xl text-primary">BUILD</span>
+              <span className="block text-6xl md:text-7xl lg:text-8xl text-primary">YOUR</span>
+              <span className="block text-6xl md:text-7xl lg:text-8xl text-accent">FUTURE</span>
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed">
-              Don't get framed by the competition,<br />
+              Professional engineering solutions,<br />
               trust our solid reputation.
             </p>
             

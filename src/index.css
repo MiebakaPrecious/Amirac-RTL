@@ -15,9 +15,9 @@
     --primary: 215 55% 22%;
     --primary-foreground: 0 0% 100%;
     
-    /* Golden Yellow Accent */
-    --accent: 43 91% 53%;
-    --accent-foreground: 215 55% 22%;
+    /* Blue Accent - Matching Logo */
+    --accent: 225 90% 45%;
+    --accent-foreground: 0 0% 100%;
     
     /* Secondary - Light Gray */
     --secondary: 210 20% 96%;
@@ -42,7 +42,7 @@
     /* Border */
     --border: 210 20% 90%;
     --input: 210 20% 90%;
-    --ring: 43 91% 53%;
+    --ring: 225 90% 45%;
     
     /* Radius */
     --radius: 0.25rem;
@@ -50,9 +50,9 @@
     /* Custom Colors */
     --navy: 215 55% 22%;
     --navy-light: 215 45% 30%;
-    --gold: 43 91% 53%;
-    --gold-dark: 40 85% 45%;
-    --gold-light: 45 95% 65%;
+    --blue: 225 90% 45%;
+    --blue-dark: 225 85% 35%;
+    --blue-light: 220 90% 60%;
     
     /* Sidebar */
     --sidebar-background: 215 55% 22%;
@@ -171,7 +171,7 @@
   
   .cta-banner::before {
     content: '';
-    @apply absolute -left-20 top-0 w-40 h-full bg-gold-dark/30;
+    @apply absolute -left-20 top-0 w-40 h-full bg-blue-dark/30;
     transform: skewX(-15deg);
   }
   
@@ -187,7 +187,7 @@
   
   /* Button variants */
   .btn-primary {
-    @apply bg-accent text-accent-foreground font-semibold px-8 py-4 hover:bg-gold-dark transition-colors duration-300;
+    @apply bg-accent text-accent-foreground font-semibold px-8 py-4 hover:bg-blue-dark transition-colors duration-300;
   }
   
   .btn-outline-light {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, Search, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.jpg";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,18 +22,10 @@ const Header = () => {
         <div className="flex items-center justify-between h-24">
           {/* Logo */}
           <a href="#" className="flex items-center gap-3">
-            <div className="flex items-center">
-              <div className="w-12 h-12 relative">
-                <div className="absolute inset-0 flex items-end">
-                  <div className="w-3 h-8 bg-accent mr-0.5" />
-                  <div className="w-3 h-10 bg-primary mr-0.5" />
-                  <div className="w-3 h-6 bg-accent" />
-                </div>
-              </div>
-            </div>
+            <img src={logo} alt="Amirac Resources and Technologies Ltd" className="h-14 w-auto" />
             <div className="flex flex-col">
-              <span className="text-xl font-heading font-bold text-primary tracking-wide">XTRA</span>
-              <span className="text-xs font-semibold text-muted-foreground tracking-widest">CONSTRUCTION</span>
+              <span className="text-lg font-heading font-bold text-primary tracking-wide">AMIRAC</span>
+              <span className="text-[9px] font-semibold text-muted-foreground tracking-wider leading-tight">RESOURCES &amp; TECHNOLOGIES</span>
             </div>
           </a>
 

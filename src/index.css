@@ -110,6 +110,23 @@
   }
 }
 
+/* 3D Flip Card Styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-x-180 {
+  transform: rotateX(-180deg);
+}
+
 @layer components {
   /* Hero diagonal background */
   .hero-diagonal {

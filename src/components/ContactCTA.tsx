@@ -1,0 +1,40 @@
+import { Link } from 'react-router-dom';
+import { Phone, Mail, MapPin } from 'lucide-react';
+
+const ContactCTA = () => {
+  return (
+    <section className="py-20 bg-primary">
+      <div className="container mx-auto px-4 text-center">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-foreground mb-6">
+          Ready to Start Your Project?
+        </h2>
+        <p className="text-primary-foreground/90 text-lg max-w-2xl mx-auto mb-8">
+          Contact us today for a free consultation. Our team of experts is ready to help you 
+          with all your engineering and training needs.
+        </p>
+        
+        {/* Contact Info */}
+        <div className="flex flex-wrap justify-center gap-8 mb-10">
+          <div className="flex items-center gap-2 text-primary-foreground">
+            <Phone className="w-5 h-5" />
+            <span>07030740932</span>
+          </div>
+          <div className="flex items-center gap-2 text-primary-foreground">
+            <Mail className="w-5 h-5" />
+            <span>amiractech.ng@gmail.com</span>
+          </div>
+        </div>
+        
+        {/* Big CTA Button */}
+        <Link
+          to="/contact"
+          className="inline-block px-10 py-4 bg-background text-foreground font-bold text-xl rounded-lg shadow-xl hover:bg-background/90 transition-all hover:scale-105"
+        >
+          Contact Us Now →
+        </Link>
+      </div>
+    </section>
+  );
+};
+
+export default ContactCTA;

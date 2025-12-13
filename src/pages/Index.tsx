@@ -1,14 +1,9 @@
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import Features from "@/components/Features";
-import About from "@/components/About";
-import Services from "@/components/Services";
-import CTABanner from "@/components/CTABanner";
-import Process from "@/components/Process";
-import Projects from "@/components/Projects";
-import Quote from "@/components/Quote";
-import Testimonials from "@/components/Testimonials";
-import Clients from "@/components/Clients";
+import HeroNew from "@/components/HeroNew";
+import AboutPreview from "@/components/AboutPreview";
+import ServicesPreview from "@/components/ServicesPreview";
+import GalleryPreview from "@/components/GalleryPreview";
+import ContactCTA from "@/components/ContactCTA";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -16,16 +11,11 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <Hero />
-        <Features />
-        <About />
-        <Services />
-        <CTABanner />
-        <Process />
-        <Projects />
-        <Quote />
-        <Testimonials />
-        <Clients />
+        <HeroNew />
+        <AboutPreview />
+        <ServicesPreview />
+        <GalleryPreview />
+        <ContactCTA />
       </main>
       <Footer />
     </div>

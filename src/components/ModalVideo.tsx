@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { X } from 'lucide-react';
 
 interface ModalVideoProps {
@@ -8,11 +8,11 @@ interface ModalVideoProps {
 }
 
 const ModalVideo = ({ videoUrl, isOpen, onClose }: ModalVideoProps) => {
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') onClose();
+  }, [onClose]);
 
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       document.addEventListener('keydown', handleEscape);
@@ -22,24 +22,24 @@ const ModalVideo = ({ videoUrl, isOpen, onClose }: ModalVideoProps) => {
       document.body.style.overflow = 'unset';
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, handleEscape]);
 
   if (!isOpen) return null;
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-4xl mx-4 bg-background rounded-lg overflow-hidden shadow-2xl animate-scale-in"
+        className="relative w-full max-w-5xl mx-4 bg-background rounded-lg overflow-hidden shadow-2xl animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-10 h-10 bg-primary text-primary-foreground rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors"
+          className="absolute top-4 right-4 z-10 w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X className="w-6 h-6" />
         </button>
         
         <div className="aspect-video">

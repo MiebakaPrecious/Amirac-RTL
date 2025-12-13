@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useGallery, GalleryItem } from '@/contexts/GalleryContext';
-import ImageFlipCard from './ImageFlipCard';
+import FlipCard from './Home/FlipCard';
 
 const GalleryPreview = () => {
   const { getRandomImages, loading } = useGallery();
@@ -26,20 +26,20 @@ const GalleryPreview = () => {
           </p>
         </div>
 
-        {/* Gallery Grid */}
+        {/* Gallery Grid - 3 cols desktop, 2 tablet, 1 mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           {randomImages.map((item) => (
-            <ImageFlipCard key={item.id} item={item} />
+            <FlipCard key={item.id} item={item} />
           ))}
         </div>
 
-        {/* View More Button */}
+        {/* Learn More Button */}
         <div className="text-center">
           <Link
             to="/gallery"
             className="inline-block px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors"
           >
-            View Gallery →
+            Learn More →
           </Link>
         </div>
       </div>

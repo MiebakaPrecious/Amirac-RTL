@@ -53,13 +53,21 @@ const AboutPreview = () => {
               ))}
             </div>
 
-            {/* Learn More Button */}
-            <Link
-              to="/about"
-              className="inline-block px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors"
-            >
-              Learn More →
-            </Link>
+            {/* Buttons */}
+            <div className="flex flex-wrap gap-4">
+              <Link
+                to="/about"
+                className="inline-block px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                Learn More →
+              </Link>
+              <Link
+                to="/services"
+                className="inline-block px-6 py-3 border-2 border-accent text-accent font-semibold rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                View Services →
+              </Link>
+            </div>
           </div>
         </div>
       </div>

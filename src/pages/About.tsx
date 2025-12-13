@@ -105,12 +105,18 @@ const About = () => {
           </div>
 
           {/* CTA */}
-          <div className="text-center">
+          <div className="text-center flex flex-wrap justify-center gap-4">
             <Link
               to="/services"
+              className="inline-block px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors"
+            >
+              Learn More → Services
+            </Link>
+            <Link
+              to="/contact"
               className="inline-block px-8 py-4 bg-primary text-primary-foreground font-bold rounded-lg shadow-lg hover:bg-primary/90 transition-colors text-lg"
             >
-              Learn More About Our Services →
+              Contact Us Now →
             </Link>
           </div>
         </div>

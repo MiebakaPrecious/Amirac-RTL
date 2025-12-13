@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail } from 'lucide-react';
 
 const ContactCTA = () => {
   return (
@@ -28,7 +28,7 @@ const ContactCTA = () => {
         {/* Big CTA Button */}
         <Link
           to="/contact"
-          className="inline-block px-10 py-4 bg-background text-foreground font-bold text-xl rounded-lg shadow-xl hover:bg-background/90 transition-all hover:scale-105"
+          className="inline-block px-10 py-4 bg-accent text-accent-foreground font-bold text-xl rounded-xl shadow-xl hover:bg-accent/90 transition-all hover:scale-105"
         >
           Contact Us Now →
         </Link>

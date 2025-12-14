@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useGallery, GalleryItem } from '@/contexts/GalleryContext';
+import { getRandomImages, GalleryImage } from '@/utils/galleryData';
 import FlipCard from './Home/FlipCard';
 
 const GalleryPreview = () => {
-  const { getRandomImages, loading } = useGallery();
-  const [randomImages, setRandomImages] = useState<GalleryItem[]>([]);
+  const [randomImages, setRandomImages] = useState<GalleryImage[]>([]);
 
   useEffect(() => {
-    // Get 6 random images on mount and refresh
     setRandomImages(getRandomImages(6));
-  }, [loading]);
+  }, []);
 
   return (
     <section className="py-20 bg-muted/30">
@@ -27,11 +25,17 @@ const GalleryPreview = () => {
         </div>
 
         {/* Gallery Grid - 3 cols desktop, 2 tablet, 1 mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {randomImages.map((item) => (
-            <FlipCard key={item.id} item={item} />
-          ))}
-        </div>
+        {randomImages.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            {randomImages.map((item) => (
+              <FlipCard key={item.id} item={item} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 text-muted-foreground">
+            No gallery images available yet.
+          </div>
+        )}
 
         {/* Learn More Button */}
         <div className="text-center">

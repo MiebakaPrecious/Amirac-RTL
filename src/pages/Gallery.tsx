@@ -2,30 +2,11 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { useGallery, GalleryItem } from '@/contexts/GalleryContext';
+import { galleryImages, getImagesByGroup, getGroupTitle, GalleryImage } from '@/utils/galleryData';
 
 const Gallery = () => {
-  const { items, loading } = useGallery();
-  const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
-
-  // Group images by service_group, excluding hero images
-  const groupedImages = items
-    .filter(item => item.service_group !== 'hero')
-    .reduce((acc, item) => {
-      if (!acc[item.service_group]) {
-        acc[item.service_group] = [];
-      }
-      acc[item.service_group].push(item);
-      return acc;
-    }, {} as Record<string, GalleryItem[]>);
-
-  // Format service group names for display
-  const formatGroupName = (slug: string) => {
-    return slug
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  };
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+  const groupedImages = getImagesByGroup();
 
   return (
     <div className="min-h-screen">
@@ -49,16 +30,15 @@ const Gallery = () => {
       {/* Gallery Content */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          {loading ? (
-            <div className="text-center py-20">
-              <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
-              <p className="mt-4 text-muted-foreground">Loading gallery...</p>
+          {Object.keys(groupedImages).length === 0 ? (
+            <div className="text-center py-20 text-muted-foreground">
+              No gallery images available yet.
             </div>
           ) : (
             Object.entries(groupedImages).map(([group, groupItems]) => (
               <div key={group} className="mb-16">
                 <h2 className="text-2xl font-heading font-bold text-primary mb-6 border-l-4 border-primary pl-4">
-                  {formatGroupName(group)}
+                  {getGroupTitle(group)}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {groupItems.map((item) => (
@@ -68,13 +48,13 @@ const Gallery = () => {
                       onClick={() => setSelectedImage(item)}
                     >
                       <img
-                        src={item.url}
-                        alt={item.filename}
+                        src={item.src}
+                        alt={item.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                        <p className="text-white text-sm font-medium">{item.filename}</p>
+                        <p className="text-white text-sm font-medium">{item.title}</p>
                       </div>
                     </div>
                   ))}
@@ -103,19 +83,16 @@ const Gallery = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={selectedImage.url}
-              alt={selectedImage.filename}
+              src={selectedImage.src}
+              alt={selectedImage.title}
               className="w-full max-h-[70vh] object-contain bg-black"
             />
             <div className="p-6">
               <h3 className="text-xl font-heading font-bold text-foreground mb-2">
-                {selectedImage.filename}
+                {selectedImage.title}
               </h3>
-              <p className="text-sm text-primary font-semibold mb-2">
-                {selectedImage.service_group}
-              </p>
               <p className="text-muted-foreground">
-                {selectedImage.description || 'Professional engineering services delivered with excellence.'}
+                {selectedImage.description}
               </p>
             </div>
           </div>

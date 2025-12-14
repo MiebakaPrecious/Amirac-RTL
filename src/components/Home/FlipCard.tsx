@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { GalleryItem } from '@/contexts/GalleryContext';
+import { GalleryImage } from '@/utils/galleryData';
 
 interface FlipCardProps {
-  item: GalleryItem;
+  item: GalleryImage;
 }
 
 const FlipCard = ({ item }: FlipCardProps) => {
@@ -32,8 +32,8 @@ const FlipCard = ({ item }: FlipCardProps) => {
         {/* Front */}
         <div className="absolute inset-0 backface-hidden rounded-lg overflow-hidden">
           <img
-            src={item.url}
-            alt={item.filename}
+            src={item.src}
+            alt={item.title}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -49,7 +49,7 @@ const FlipCard = ({ item }: FlipCardProps) => {
           </button>
           
           <div className="absolute bottom-4 left-4 right-4">
-            <p className="text-white font-semibold text-lg">{item.service_group}</p>
+            <p className="text-white font-semibold text-lg">{item.title}</p>
           </div>
         </div>
         
@@ -61,10 +61,10 @@ const FlipCard = ({ item }: FlipCardProps) => {
           onMouseLeave={() => handleArrowHover(false)}
         >
           <h3 className="text-2xl font-heading font-bold text-primary-foreground mb-4">
-            {item.service_group}
+            {item.title}
           </h3>
           <p className="text-primary-foreground/90 text-sm mb-6 leading-relaxed">
-            {item.description || 'Professional engineering services delivered with excellence and precision.'}
+            {item.description}
           </p>
           <button
             onClick={(e) => {

@@ -8,14 +8,24 @@ const Gallery = () => {
   const { items, loading } = useGallery();
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
 
-  // Group images by service_group
-  const groupedImages = items.reduce((acc, item) => {
-    if (!acc[item.service_group]) {
-      acc[item.service_group] = [];
-    }
-    acc[item.service_group].push(item);
-    return acc;
-  }, {} as Record<string, GalleryItem[]>);
+  // Group images by service_group, excluding hero images
+  const groupedImages = items
+    .filter(item => item.service_group !== 'hero')
+    .reduce((acc, item) => {
+      if (!acc[item.service_group]) {
+        acc[item.service_group] = [];
+      }
+      acc[item.service_group].push(item);
+      return acc;
+    }, {} as Record<string, GalleryItem[]>);
+
+  // Format service group names for display
+  const formatGroupName = (slug: string) => {
+    return slug
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
 
   return (
     <div className="min-h-screen">
@@ -48,7 +58,7 @@ const Gallery = () => {
             Object.entries(groupedImages).map(([group, groupItems]) => (
               <div key={group} className="mb-16">
                 <h2 className="text-2xl font-heading font-bold text-primary mb-6 border-l-4 border-primary pl-4">
-                  {group}
+                  {formatGroupName(group)}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {groupItems.map((item) => (

@@ -1,5 +1,5 @@
 import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
-import logo from "@/assets/logo.jpg";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   return (
@@ -10,7 +10,7 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <img src={logo} alt="Amirac Resources and Technologies Ltd" className="h-12 w-auto bg-white rounded p-1" />
+              <img src={logo} alt="Amirac Resources and Technologies Ltd" className="h-12 w-auto" />
               <div className="flex flex-col">
                 <span className="text-lg font-heading font-bold tracking-wide">AMIRAC</span>
                 <span className="text-[9px] font-semibold text-primary-foreground/70 tracking-wider leading-tight">RESOURCES &amp; TECHNOLOGIES</span>

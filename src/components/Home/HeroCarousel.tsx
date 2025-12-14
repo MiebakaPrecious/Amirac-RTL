@@ -1,53 +1,57 @@
 import { useState, useEffect } from 'react';
 import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useGallery } from '@/contexts/GalleryContext';
 
 interface HeroCarouselProps {
   onPlayVideo: () => void;
 }
 
-const slides = [
-  {
-    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop',
-    type: 'video' as const,
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1581094794329-c8112c4e5190?w=1200&h=800&fit=crop',
-    type: 'about' as const,
-  },
-];
-
 const HeroCarousel = ({ onPlayVideo }: HeroCarouselProps) => {
+  const { items } = useGallery();
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Get hero images from gallery
+  const heroImages = items.filter(item => item.service_group === 'hero');
+  
+  // Fallback images if no hero images in database
+  const fallbackSlides = [
+    { url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop' },
+    { url: 'https://images.unsplash.com/photo-1581094794329-c8112c4e5190?w=1200&h=800&fit=crop' },
+  ];
+
+  const slides = heroImages.length >= 2 
+    ? [heroImages[0], heroImages[1]] 
+    : fallbackSlides.map((s, i) => ({ ...s, id: `fallback-${i}`, filename: `hero-${i+1}`, service_group: 'hero', description: null }));
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      setCurrentSlide((prev) => (prev + 1) % 2);
     }, 6000);
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % 2);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + 2) % 2);
 
   return (
     <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
       {slides.map((slide, index) => (
         <div
-          key={index}
+          key={slide.id || index}
           className={`absolute inset-0 transition-opacity duration-700 ${
             index === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
           <img
-            src={slide.image}
-            alt={`Slide ${index + 1}`}
+            src={slide.url}
+            alt={`Hero ${index + 1}`}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           
           {/* Slide Content */}
           <div className="absolute inset-0 flex items-center justify-center">
-            {slide.type === 'video' ? (
+            {index === 0 ? (
               <div className="text-center">
                 <button
                   onClick={onPlayVideo}
@@ -94,7 +98,7 @@ const HeroCarousel = ({ onPlayVideo }: HeroCarouselProps) => {
       
       {/* Slide Indicators */}
       <div className="absolute bottom-6 left-6 flex gap-2">
-        {slides.map((_, index) => (
+        {[0, 1].map((index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}

@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { GalleryImage } from '@/utils/galleryData';
 
 interface FlipCardProps {
-  item: GalleryImage;
+  item: {
+    id: string;
+    src: string;
+    group: string;
+    title: string;
+    description: string;
+  };
 }
 
 const FlipCard = ({ item }: FlipCardProps) => {

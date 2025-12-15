@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail } from 'lucide-react';
+import { contactInfo } from '@/utils/contactInfo';
 
 const ContactCTA = () => {
   return (
@@ -14,14 +15,22 @@ const ContactCTA = () => {
         </p>
         
         {/* Contact Info */}
-        <div className="flex flex-wrap justify-center gap-8 mb-10">
+        <div className="flex flex-wrap justify-center gap-6 mb-10">
           <div className="flex items-center gap-2 text-primary-foreground">
             <Phone className="w-5 h-5" />
-            <span>07030740932</span>
+            <div className="flex flex-wrap gap-x-3 gap-y-1">
+              {contactInfo.phoneNumbers.map((phone, index) => (
+                <a key={index} href={`tel:${phone}`} className="hover:text-accent transition-colors">
+                  {phone}
+                </a>
+              ))}
+            </div>
           </div>
           <div className="flex items-center gap-2 text-primary-foreground">
             <Mail className="w-5 h-5" />
-            <span>amiractech.ng@gmail.com</span>
+            <a href={`mailto:${contactInfo.email}`} className="hover:text-accent transition-colors">
+              {contactInfo.email}
+            </a>
           </div>
         </div>
         

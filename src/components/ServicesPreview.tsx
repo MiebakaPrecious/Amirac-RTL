@@ -1,40 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Wrench, Anchor, Zap, Settings, GraduationCap, Gauge } from 'lucide-react';
-
-const services = [
-  {
-    icon: Wrench,
-    title: 'Equipment Maintenance',
-    description: 'Rotating & static equipment maintenance, heavy-duty machinery repairs and industrial valve services.',
-  },
-  {
-    icon: Anchor,
-    title: 'Marine Services',
-    description: 'Marine machinery maintenance, engine room watchkeeping, and onboard ship machinery services.',
-  },
-  {
-    icon: Zap,
-    title: 'Electrical Services',
-    description: 'Industrial electrical installation, maintenance, and comprehensive electrical system solutions.',
-  },
-  {
-    icon: Settings,
-    title: 'Industrial Systems',
-    description: 'Pneumatic systems, instrumentation & control, pumps, compressors and pressure testing.',
-  },
-  {
-    icon: GraduationCap,
-    title: 'Training Programs',
-    description: 'Technical skills training, welding certifications, forklift operator training and safety programs.',
-  },
-  {
-    icon: Gauge,
-    title: 'Refurbishment',
-    description: 'Components refurbishing, pressure testing, and quality assurance for industrial equipment.',
-  },
-];
+import { services } from '@/utils/servicesData';
 
 const ServicesPreview = () => {
+  // Show first 6 services on home page
+  const previewServices = services.slice(0, 6);
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -51,7 +21,7 @@ const ServicesPreview = () => {
 
         {/* Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-          {services.map((service, index) => (
+          {previewServices.map((service, index) => (
             <div
               key={index}
               className="group bg-card p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-lg"

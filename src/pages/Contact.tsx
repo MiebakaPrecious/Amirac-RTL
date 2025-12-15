@@ -5,6 +5,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { contactInfo } from '@/utils/contactInfo';
+import { services } from '@/utils/servicesData';
 
 const contactSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
@@ -14,17 +16,6 @@ const contactSchema = z.object({
   message: z.string().min(10, 'Message must be at least 10 characters').max(1000),
   registerForTraining: z.boolean().default(false),
 });
-
-const services = [
-  'Equipment Maintenance',
-  'Marine Services',
-  'Electrical Services',
-  'Welding Training',
-  'Forklift Training',
-  'Technical Training',
-  'Industrial Systems',
-  'Other',
-];
 
 const Contact = () => {
   const { toast } = useToast();
@@ -130,9 +121,17 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Phone</h3>
-                    <a href="tel:07030740932" className="text-muted-foreground hover:text-primary transition-colors">
-                      07030740932
-                    </a>
+                    <div className="flex flex-col gap-1">
+                      {contactInfo.phoneNumbers.map((phone, index) => (
+                        <a 
+                          key={index} 
+                          href={`tel:${phone}`} 
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          {phone}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -142,8 +141,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                    <a href="mailto:amiractech.ng@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
-                      amiractech.ng@gmail.com
+                    <a href={`mailto:${contactInfo.email}`} className="text-muted-foreground hover:text-primary transition-colors">
+                      {contactInfo.email}
                     </a>
                   </div>
                 </div>
@@ -155,9 +154,7 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Address</h3>
                     <p className="text-muted-foreground">
-                      Km2 AANL Building, Beside Fort Oil Filling Station,<br />
-                      Adjacent Winners Chapel Church, along Odani-Akpajo Express Way,<br />
-                      East-West Road, Port Harcourt, Rivers State, Nigeria.
+                      {contactInfo.address}
                     </p>
                   </div>
                 </div>
@@ -169,9 +166,9 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Business Hours</h3>
                     <p className="text-muted-foreground">
-                      Monday - Friday: 8:00 AM - 5:00 PM<br />
-                      Saturday: 9:00 AM - 2:00 PM<br />
-                      Sunday: Closed
+                      {contactInfo.businessHours.weekdays}<br />
+                      {contactInfo.businessHours.saturday}<br />
+                      {contactInfo.businessHours.sunday}
                     </p>
                   </div>
                 </div>
@@ -254,9 +251,9 @@ const Contact = () => {
                       className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
                     >
                       <option value="">Select a service</option>
-                      {services.map((service) => (
-                        <option key={service} value={service}>
-                          {service}
+                      {services.map((service, index) => (
+                        <option key={index} value={service.title}>
+                          {service.title}
                         </option>
                       ))}
                     </select>

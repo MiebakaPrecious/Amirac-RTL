@@ -1,3 +1,4 @@
+// Static imports for local gallery images
 import industrialValves2 from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-2.jpeg';
 import industrialValves4 from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-4.jpeg';
 
@@ -52,13 +53,28 @@ export const serviceGroups: ServiceGroup[] = [
     description: 'Complete industrial electrical installation and maintenance services.',
   },
   {
+    slug: 'engine-room-watchkeeping',
+    title: 'Engine Room Watch Keeping Practice',
+    description: 'Engine room watch keeping training and practice for marine operations.',
+  },
+  {
+    slug: 'basic-technical-training',
+    title: 'Basic Technical Skill Training',
+    description: 'Foundational technical skills development and training programs.',
+  },
+  {
+    slug: 'mechanical-technician-practice',
+    title: 'Mechanical Technician Practice',
+    description: 'Hands-on mechanical technician training and practice.',
+  },
+  {
     slug: 'hero',
     title: 'Hero Images',
     description: 'Hero banner images for the website.',
   },
 ];
 
-// Static gallery images from local assets
+// Static gallery images from local assets - only include images that actually exist
 export const staticGalleryImages: GalleryImage[] = [
   {
     id: 'static-ivpc-1',

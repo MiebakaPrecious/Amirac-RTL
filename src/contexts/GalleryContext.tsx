@@ -85,9 +85,12 @@ export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children })
       const supabaseImages = convertSupabaseToUnified(data || []);
       const staticImages = convertStaticToUnified(staticGalleryImages);
       
-      // Combine both sources, avoiding duplicates by checking src
-      const supabaseSrcs = new Set(supabaseImages.map(img => img.src));
-      const uniqueStaticImages = staticImages.filter(img => !supabaseSrcs.has(img.src));
+      // Get all groups that have Supabase images
+      const supabaseGroups = new Set(supabaseImages.map(img => img.group));
+      
+      // Only include static images for groups that DON'T have Supabase images
+      // This prevents duplicate entries for the same service group
+      const uniqueStaticImages = staticImages.filter(img => !supabaseGroups.has(img.group));
       
       setAllImages([...supabaseImages, ...uniqueStaticImages]);
     } catch (err) {

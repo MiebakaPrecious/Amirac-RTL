@@ -33,35 +33,27 @@ const About = () => {
       {/* About Content */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-            <div>
-              <img
-                src="https://images.unsplash.com/photo-1581094794329-c8112c4e5190?w=800&h=600&fit=crop"
-                alt="Amirac team working on industrial equipment"
-                className="rounded-lg shadow-xl w-full"
-              />
-            </div>
-            <div>
-              <h2 className="text-3xl font-heading font-bold text-primary mb-6">
-                Who We Are
-              </h2>
-              <p className="text-muted-foreground mb-4 leading-relaxed">
-                Amirac Resources & Technologies Ltd is a premier engineering company based in Port Harcourt, 
-                Rivers State, Nigeria. We specialize in providing comprehensive marine and industrial 
-                engineering solutions, including equipment maintenance, technical training, and specialized 
-                engineering services.
-              </p>
-              <p className="text-muted-foreground mb-4 leading-relaxed">
-                With over 15 years of combined experience, our team of certified professionals delivers 
-                top-tier services to clients across the oil & gas, maritime, manufacturing, and industrial 
-                sectors. We pride ourselves on our commitment to quality, safety, and customer satisfaction.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Our state-of-the-art training facility and experienced instructors provide industry-recognized 
-                certifications and hands-on training programs that prepare professionals for success in their 
-                respective fields.
-              </p>
-            </div>
+          {/* Who We Are - Text Only, Centered */}
+          <div className="max-w-4xl mx-auto text-center mb-20">
+            <h2 className="text-3xl font-heading font-bold text-primary mb-6">
+              Who We Are
+            </h2>
+            <p className="text-muted-foreground mb-4 leading-relaxed">
+              Amirac Resources & Technologies Ltd is a premier engineering company based in Port Harcourt, 
+              Rivers State, Nigeria. We specialize in providing comprehensive marine and industrial 
+              engineering solutions, including equipment maintenance, technical training, and specialized 
+              engineering services.
+            </p>
+            <p className="text-muted-foreground mb-4 leading-relaxed">
+              With over 15 years of combined experience, our team of certified professionals delivers 
+              top-tier services to clients across the oil & gas, maritime, manufacturing, and industrial 
+              sectors. We pride ourselves on our commitment to quality, safety, and customer satisfaction.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Our state-of-the-art training facility and experienced instructors provide industry-recognized 
+              certifications and hands-on training programs that prepare professionals for success in their 
+              respective fields.
+            </p>
           </div>
 
           {/* Mission & Vision */}

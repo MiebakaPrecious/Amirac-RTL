@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { galleryImages, getImagesByGroup, getGroupTitle, GalleryImage } from '@/utils/galleryData';
+import { useGallery, UnifiedGalleryImage } from '@/contexts/GalleryContext';
+import { getGroupTitle } from '@/utils/galleryData';
 
 const Gallery = () => {
-  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+  const { getImagesByGroup, loading } = useGallery();
+  const [selectedImage, setSelectedImage] = useState<UnifiedGalleryImage | null>(null);
   const groupedImages = getImagesByGroup();
 
   return (
@@ -30,7 +32,13 @@ const Gallery = () => {
       {/* Gallery Content */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          {Object.keys(groupedImages).length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="aspect-square bg-muted animate-pulse rounded-lg" />
+              ))}
+            </div>
+          ) : Object.keys(groupedImages).length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
               No gallery images available yet.
             </div>

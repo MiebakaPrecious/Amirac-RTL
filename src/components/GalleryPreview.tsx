@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getRandomImages, GalleryImage } from '@/utils/galleryData';
+import { useGallery, UnifiedGalleryImage } from '@/contexts/GalleryContext';
 import FlipCard from './Home/FlipCard';
 
 const GalleryPreview = () => {
-  const [randomImages, setRandomImages] = useState<GalleryImage[]>([]);
+  const { getRandomImages, loading } = useGallery();
+  const [randomImages, setRandomImages] = useState<UnifiedGalleryImage[]>([]);
 
   useEffect(() => {
-    setRandomImages(getRandomImages(6));
-  }, []);
+    if (!loading) {
+      setRandomImages(getRandomImages(6));
+    }
+  }, [loading, getRandomImages]);
 
   return (
     <section className="py-20 bg-muted/30">
@@ -25,7 +28,13 @@ const GalleryPreview = () => {
         </div>
 
         {/* Gallery Grid - 3 cols desktop, 2 tablet, 1 mobile */}
-        {randomImages.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="aspect-[4/3] bg-muted animate-pulse rounded-lg" />
+            ))}
+          </div>
+        ) : randomImages.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
             {randomImages.map((item) => (
               <FlipCard key={item.id} item={item} />

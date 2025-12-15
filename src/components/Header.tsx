@@ -22,7 +22,12 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Amirac Resources and Technologies Ltd" className="h-12 w-auto" />
+            <img 
+              src={logo} 
+              alt="Amirac Resources and Technologies Ltd" 
+              className="h-12 w-auto object-contain" 
+              style={{ background: 'transparent' }}
+            />
             <div className="flex flex-col">
               <span className="text-lg font-heading font-bold text-primary tracking-wide">AMIRAC</span>
               <span className="text-[8px] font-semibold text-muted-foreground tracking-wider leading-tight">RESOURCES & TECHNOLOGIES</span>

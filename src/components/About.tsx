@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import aboutImage from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-2.jpeg';
 
 const highlights = [
   "Excellent engineering",
@@ -15,8 +16,8 @@ const About = () => {
           {/* Image */}
           <div className="relative">
             <img
-              src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&h=500&fit=crop"
-              alt="Construction site with workers"
+              src={aboutImage}
+              alt="Industrial valves, pumps and compressor maintenance"
               className="w-full h-[500px] object-cover rounded-sm shadow-xl"
             />
             {/* Decorative element */}

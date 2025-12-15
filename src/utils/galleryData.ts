@@ -1,5 +1,5 @@
-import industrialValves2 from '@/assets/gallery/﻿﻿Industrial-valves-Pumps-compressor-service-2.jpeg';
-import industrialValves4 from '@/assets/gallery/﻿﻿Industrial-valves-Pumps-compressor-service-4.jpeg';
+import industrialValves2 from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-2.jpeg';
+import industrialValves4 from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-4.jpeg';
 
 export interface GalleryImage {
   id: string;

@@ -3,6 +3,7 @@ import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 import { z } from 'zod';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import GoogleMap from '@/components/GoogleMap';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { contactInfo } from '@/utils/contactInfo';
@@ -306,6 +307,24 @@ const Contact = () => {
                 </form>
               )}
             </div>
+          </div>
+
+          {/* Google Map */}
+          <div className="lg:col-span-2 mt-12">
+            <h2 className="text-2xl font-heading font-bold text-primary mb-6">
+              Our Location
+            </h2>
+            <GoogleMap height="450px" />
+            <p className="text-sm text-muted-foreground mt-4 text-center">
+              <a 
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors underline"
+              >
+                View larger map & get directions →
+              </a>
+            </p>
           </div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useGallery, UnifiedGalleryImage } from '@/contexts/GalleryContext';
 import FlipCard from './Home/FlipCard';
@@ -6,10 +6,13 @@ import FlipCard from './Home/FlipCard';
 const GalleryPreview = () => {
   const { getRandomImages, loading } = useGallery();
   const [randomImages, setRandomImages] = useState<UnifiedGalleryImage[]>([]);
+  const hasInitialized = useRef(false);
 
+  // Random selection happens only ONCE per page load
   useEffect(() => {
-    if (!loading) {
+    if (!loading && !hasInitialized.current) {
       setRandomImages(getRandomImages(6));
+      hasInitialized.current = true;
     }
   }, [loading, getRandomImages]);
 

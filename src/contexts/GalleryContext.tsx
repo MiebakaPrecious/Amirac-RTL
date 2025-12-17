@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { staticGalleryImages, GalleryImage as StaticGalleryImage } from '@/utils/galleryData';
 
@@ -112,14 +112,14 @@ export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children })
     fetchGallery();
   }, []);
 
-  const getRandomImages = (count: number): UnifiedGalleryImage[] => {
+  const getRandomImages = useCallback((count: number): UnifiedGalleryImage[] => {
     // Filter out hero images
     const galleryItems = allImages.filter(item => item.group !== 'hero');
     const shuffled = [...galleryItems].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, Math.min(count, shuffled.length));
-  };
+  }, [allImages]);
 
-  const getImagesByGroup = (): Record<string, UnifiedGalleryImage[]> => {
+  const getImagesByGroup = useCallback((): Record<string, UnifiedGalleryImage[]> => {
     // Filter out hero images
     const galleryItems = allImages.filter(item => item.group !== 'hero');
     return galleryItems.reduce((acc, image) => {
@@ -129,10 +129,20 @@ export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children })
       acc[image.group].push(image);
       return acc;
     }, {} as Record<string, UnifiedGalleryImage[]>);
-  };
+  }, [allImages]);
+
+  const contextValue = useMemo(() => ({
+    items,
+    allImages,
+    loading,
+    error,
+    getRandomImages,
+    getImagesByGroup,
+    refetch: fetchGallery
+  }), [items, allImages, loading, error, getRandomImages, getImagesByGroup]);
 
   return (
-    <GalleryContext.Provider value={{ items, allImages, loading, error, getRandomImages, getImagesByGroup, refetch: fetchGallery }}>
+    <GalleryContext.Provider value={contextValue}>
       {children}
     </GalleryContext.Provider>
   );

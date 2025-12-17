@@ -1,6 +1,8 @@
-// Static imports for local gallery images
-import industrialValves2 from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-2.jpeg';
-import industrialValves4 from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-4.jpeg';
+// Vite-compatible dynamic imports for all gallery images
+const imageModules = import.meta.glob<{ default: string }>(
+  '/src/assets/gallery/**/*.{jpg,jpeg,png,webp}',
+  { eager: true }
+);
 
 export interface GalleryImage {
   id: string;
@@ -16,6 +18,7 @@ export interface ServiceGroup {
   description: string;
 }
 
+// Service group definitions with keywords for filename matching
 export const serviceGroups: ServiceGroup[] = [
   {
     slug: 'industrial-valves-pumps-compressors',
@@ -74,23 +77,69 @@ export const serviceGroups: ServiceGroup[] = [
   },
 ];
 
-// Static gallery images from local assets - only include images that actually exist
-export const staticGalleryImages: GalleryImage[] = [
-  {
-    id: 'static-ivpc-1',
-    src: industrialValves2,
-    group: 'industrial-valves-pumps-compressors',
-    title: 'Industrial Valves, Pumps & Compressor Services',
-    description: 'Maintenance, servicing, testing, and performance optimization of industrial valves, pumps, and compressor systems for onshore, offshore, marine, and industrial operations.',
-  },
-  {
-    id: 'static-ivpc-2',
-    src: industrialValves4,
-    group: 'industrial-valves-pumps-compressors',
-    title: 'Industrial Valves, Pumps & Compressor Services',
-    description: 'Maintenance, servicing, testing, and performance optimization of industrial valves, pumps, and compressor systems for onshore, offshore, marine, and industrial operations.',
-  },
-];
+// Keyword mapping for service group detection from filenames
+const serviceKeywords: Record<string, string[]> = {
+  'industrial-valves-pumps-compressors': ['valve', 'valves', 'pump', 'pumps', 'compressor'],
+  'rotating-static-equipment': ['rotating', 'static', 'equipment'],
+  'heavy-duty-machinery': ['heavy', 'duty', 'machinery'],
+  'marine-machinery': ['marine', 'ship', 'vessel'],
+  'welding-training': ['weld', 'welding'],
+  'forklift-training': ['forklift', 'fork'],
+  'electrical-services': ['electric', 'electrical'],
+  'engine-room-watchkeeping': ['engine', 'room', 'watchkeeping'],
+  'basic-technical-training': ['basic', 'technical', 'training'],
+  'mechanical-technician-practice': ['mechanical', 'technician'],
+  'hero': ['hero'],
+};
+
+// Detect service group from filename
+const detectServiceGroup = (filename: string): string => {
+  const lowerFilename = filename.toLowerCase();
+  
+  for (const [group, keywords] of Object.entries(serviceKeywords)) {
+    for (const keyword of keywords) {
+      if (lowerFilename.includes(keyword)) {
+        return group;
+      }
+    }
+  }
+  
+  return 'general';
+};
+
+// Get service group details
+const getServiceGroupDetails = (slug: string): { title: string; description: string } => {
+  const group = serviceGroups.find(g => g.slug === slug);
+  return {
+    title: group?.title || slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    description: group?.description || 'Professional industrial services.',
+  };
+};
+
+// Build gallery images from Vite's import.meta.glob
+const buildGalleryImages = (): GalleryImage[] => {
+  const images: GalleryImage[] = [];
+  
+  Object.entries(imageModules).forEach(([path, module], index) => {
+    // Extract filename from path
+    const filename = path.split('/').pop() || '';
+    const group = detectServiceGroup(filename);
+    const { title, description } = getServiceGroupDetails(group);
+    
+    images.push({
+      id: `vite-${index}-${filename.replace(/\.[^/.]+$/, '')}`,
+      src: module.default,
+      group,
+      title,
+      description,
+    });
+  });
+  
+  return images;
+};
+
+// Static gallery images built at module load time
+export const staticGalleryImages: GalleryImage[] = buildGalleryImages();
 
 // Legacy export for backward compatibility
 export const galleryImages = staticGalleryImages;

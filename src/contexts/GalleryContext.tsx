@@ -67,37 +67,61 @@ export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children })
   const fetchGallery = async () => {
     try {
       setLoading(true);
-      const { data, error: fetchError } = await supabase
+      
+      // First try to get images from the gallery table
+      const { data: tableData, error: tableError } = await supabase
         .from('gallery')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (fetchError) {
-        console.error('Error fetching gallery:', fetchError);
-        // Use only static images on error
-        setAllImages(convertStaticToUnified(staticGalleryImages));
-        return;
+      if (tableError) {
+        console.error('Error fetching gallery table:', tableError);
       }
 
-      setItems(data || []);
+      // Also fetch directly from storage bucket
+      const { data: storageFiles, error: storageError } = await supabase
+        .storage
+        .from('gallery')
+        .list('', { limit: 100, sortBy: { column: 'created_at', order: 'desc' } });
 
-      // Merge Supabase images with static images
-      const supabaseImages = convertSupabaseToUnified(data || []);
+      if (storageError) {
+        console.error('Error fetching storage files:', storageError);
+      }
+
+      // Convert storage files to gallery items (if not already in table)
+      const storageImages: GalleryItem[] = [];
+      const tableUrls = new Set((tableData || []).map(item => item.url));
+      
+      if (storageFiles && storageFiles.length > 0) {
+        for (const file of storageFiles) {
+          if (file.name && !file.name.startsWith('.')) {
+            const { data: urlData } = supabase.storage.from('gallery').getPublicUrl(file.name);
+            
+            // Only add if not already in table
+            if (!tableUrls.has(urlData.publicUrl)) {
+              const serviceGroup = detectServiceGroupFromFilename(file.name);
+              storageImages.push({
+                id: `storage-${file.id || file.name}`,
+                url: urlData.publicUrl,
+                filename: file.name,
+                service_group: serviceGroup,
+                description: null,
+              });
+            }
+          }
+        }
+      }
+
+      // Combine table data and storage files
+      const allSupabaseItems = [...(tableData || []), ...storageImages];
+      setItems(allSupabaseItems);
+
+      // Merge with static images
+      const supabaseImages = convertSupabaseToUnified(allSupabaseItems);
       const staticImages = convertStaticToUnified(staticGalleryImages);
       
-      if (supabaseImages.length === 0) {
-        // No Supabase images, just use static images
-        setAllImages(staticImages);
-      } else {
-        // Get all groups that have Supabase images
-        const supabaseGroups = new Set(supabaseImages.map(img => img.group));
-        
-        // Only include static images for groups that DON'T have Supabase images
-        // This prevents duplicate entries for the same service group
-        const uniqueStaticImages = staticImages.filter(img => !supabaseGroups.has(img.group));
-        
-        setAllImages([...supabaseImages, ...uniqueStaticImages]);
-      }
+      // Combine all images - supabase first, then static
+      setAllImages([...supabaseImages, ...staticImages]);
     } catch (err) {
       console.error('Gallery fetch error:', err);
       setError('Failed to load gallery');
@@ -106,6 +130,36 @@ export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children })
     } finally {
       setLoading(false);
     }
+  };
+
+  // Detect service group from filename
+  const detectServiceGroupFromFilename = (filename: string): string => {
+    const lower = filename.toLowerCase();
+    if (lower.includes('valve') || lower.includes('pump') || lower.includes('compressor')) {
+      return 'industrial-valves-pumps-compressors';
+    }
+    if (lower.includes('rotating') || lower.includes('static')) {
+      return 'rotating-static-equipment';
+    }
+    if (lower.includes('heavy') || lower.includes('machinery')) {
+      return 'heavy-duty-machinery';
+    }
+    if (lower.includes('marine') || lower.includes('ship')) {
+      return 'marine-machinery';
+    }
+    if (lower.includes('weld')) {
+      return 'welding-training';
+    }
+    if (lower.includes('forklift')) {
+      return 'forklift-training';
+    }
+    if (lower.includes('electric')) {
+      return 'electrical-services';
+    }
+    if (lower.includes('hero')) {
+      return 'hero';
+    }
+    return 'general';
   };
 
   useEffect(() => {

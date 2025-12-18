@@ -1,16 +1,8 @@
-// Vite-compatible dynamic imports for all gallery images
-const imageModules = import.meta.glob<{ default: string }>(
-  '/src/assets/gallery/**/*.{jpg,jpeg,png,webp}',
-  { eager: true }
-);
-
-export interface GalleryImage {
-  id: string;
-  src: string;
-  group: string;
-  title: string;
-  description: string;
-}
+// Use Vite's import.meta.glob to eagerly import gallery image defaults
+const galleryImages = import.meta.glob(
+  "../assets/gallery/**/*.{jpg,jpeg,png,webp}",
+  { eager: true, import: "default" }
+) as Record<string, string>;
 
 export interface ServiceGroup {
   slug: string;
@@ -79,7 +71,7 @@ export const serviceGroups: ServiceGroup[] = [
 
 // Keyword mapping for service group detection from filenames
 const serviceKeywords: Record<string, string[]> = {
-  'industrial-valves-pumps-compressors': ['valve', 'valves', 'pump', 'pumps', 'compressor'],
+  'industrial-valves-pumps-compressors': ['valve', 'valves', 'pump', 'pumps', 'compressor', 'industrial-valves'],
   'rotating-static-equipment': ['rotating', 'static', 'equipment'],
   'heavy-duty-machinery': ['heavy', 'duty', 'machinery'],
   'marine-machinery': ['marine', 'ship', 'vessel'],
@@ -92,78 +84,35 @@ const serviceKeywords: Record<string, string[]> = {
   'hero': ['hero'],
 };
 
-// Detect service group from filename
-const detectServiceGroup = (filename: string): string => {
-  const lowerFilename = filename.toLowerCase();
-  
-  for (const [group, keywords] of Object.entries(serviceKeywords)) {
-    for (const keyword of keywords) {
-      if (lowerFilename.includes(keyword)) {
-        return group;
-      }
+export interface GalleryDataItem {
+  service: string;
+  images: string[];
+  description: string;
+}
+
+// Build `galleryData` by filtering the globbed image defaults with keywords
+export const galleryData: GalleryDataItem[] = serviceGroups
+  .filter(group => group.slug !== "hero")
+  .map((group) => {
+    const keywords = serviceKeywords[group.slug];
+
+    if (!keywords) {
+      return null;
     }
-  }
-  
-  return 'general';
-};
 
-// Get service group details
-const getServiceGroupDetails = (slug: string): { title: string; description: string } => {
-  const group = serviceGroups.find(g => g.slug === slug);
-  return {
-    title: group?.title || slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-    description: group?.description || 'Professional industrial services.',
-  };
-};
-
-// Build gallery images from Vite's import.meta.glob
-const buildGalleryImages = (): GalleryImage[] => {
-  const images: GalleryImage[] = [];
-  
-  Object.entries(imageModules).forEach(([path, module], index) => {
-    // Extract filename from path
-    const filename = path.split('/').pop() || '';
-    const group = detectServiceGroup(filename);
-    const { title, description } = getServiceGroupDetails(group);
-    
-    images.push({
-      id: `vite-${index}-${filename.replace(/\.[^/.]+$/, '')}`,
-      src: module.default,
-      group,
-      title,
-      description,
+    const images = Object.values(galleryImages).filter((img) => {
+      const s = String(img).toLowerCase();
+      return keywords.some((kw) => s.includes(kw));
     });
-  });
-  
-  return images;
-};
 
-// Static gallery images built at module load time
-export const staticGalleryImages: GalleryImage[] = buildGalleryImages();
-
-// Legacy export for backward compatibility
-export const galleryImages = staticGalleryImages;
-
-export const getRandomImages = (count: number, allImages: GalleryImage[] = staticGalleryImages): GalleryImage[] => {
-  // Filter out hero images
-  const filteredImages = allImages.filter(img => img.group !== 'hero');
-  const shuffled = [...filteredImages].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(count, shuffled.length));
-};
-
-export const getImagesByGroup = (allImages: GalleryImage[] = staticGalleryImages): Record<string, GalleryImage[]> => {
-  // Filter out hero images
-  const filteredImages = allImages.filter(img => img.group !== 'hero');
-  return filteredImages.reduce((acc, image) => {
-    if (!acc[image.group]) {
-      acc[image.group] = [];
+    if (images.length === 0) {
+      return null;
     }
-    acc[image.group].push(image);
-    return acc;
-  }, {} as Record<string, GalleryImage[]>);
-};
 
-export const getGroupTitle = (slug: string): string => {
-  const group = serviceGroups.find(g => g.slug === slug);
-  return group?.title || slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-};
+    return {
+      service: group.title,
+      images,
+      description: group.description,
+    };
+  })
+  .filter(Boolean) as GalleryDataItem[];

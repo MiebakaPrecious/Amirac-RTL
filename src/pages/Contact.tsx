@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, CheckCircle, GraduationCap, Wrench } from 'lucide-react';
 import { z } from 'zod';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -98,9 +98,23 @@ const Contact = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-primary mt-4 mb-6">
               Contact Us
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
               Have a question or want to work with us? We'd love to hear from you.
             </p>
+            
+            {/* Quick Action Cards */}
+            <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              <div className="bg-accent/10 border-2 border-accent/30 rounded-xl p-6 text-center">
+                <GraduationCap className="w-10 h-10 text-accent mx-auto mb-3" />
+                <h3 className="font-heading font-bold text-foreground mb-2">Register for Training</h3>
+                <p className="text-sm text-muted-foreground">Enroll in our professional training programs</p>
+              </div>
+              <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-6 text-center">
+                <Wrench className="w-10 h-10 text-primary mx-auto mb-3" />
+                <h3 className="font-heading font-bold text-foreground mb-2">Book Engineering Services</h3>
+                <p className="text-sm text-muted-foreground">Request our engineering solutions</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

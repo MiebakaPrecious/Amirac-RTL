@@ -1,5 +1,5 @@
 export const contactInfo = {
-  phoneNumbers: ['07030740932', '09160897892', '08072608820'],
+  phoneNumbers: ['0903 099 7517', '0904 910 5096'],
   email: 'amiractech.ng@gmail.com',
   address: 'Km2 AANL Building, Beside Fort Oil Filling Station, Adjacent Winners Chapel Church, along Odani-Akpajo Express Way, East-West Road, Port Harcourt, Rivers State, Nigeria.',
   businessHours: {

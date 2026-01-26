@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CheckCircle, Target, Eye, Heart } from 'lucide-react';
+import { CheckCircle, Target, Eye, Heart, User } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import aboutImage from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-2.jpeg';
@@ -9,6 +9,29 @@ const coreValues = [
   { icon: Heart, title: 'Integrity', description: 'Operating with honesty, transparency, and ethical standards.' },
   { icon: Eye, title: 'Innovation', description: 'Embracing new technologies and methodologies for better solutions.' },
   { icon: CheckCircle, title: 'Safety', description: 'Prioritizing safety in all operations and training programs.' },
+];
+
+const managementTeam = [
+  {
+    name: 'Engr. Amara Okonkwo',
+    position: 'Managing Director / CEO',
+    photo: null,
+  },
+  {
+    name: 'Engr. Chukwudi Eze',
+    position: 'Technical Director',
+    photo: null,
+  },
+  {
+    name: 'Mrs. Adaeze Nwosu',
+    position: 'Operations Manager',
+    photo: null,
+  },
+  {
+    name: 'Mr. Emeka Okoro',
+    position: 'Training Coordinator',
+    photo: null,
+  },
 ];
 
 const About = () => {
@@ -65,6 +88,44 @@ const About = () => {
                 certifications and hands-on training programs that prepare professionals for success in their 
                 respective fields.
               </p>
+            </div>
+          </div>
+
+          {/* Management Team Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-heading font-bold text-primary mb-4">
+                Meet Our Management Team
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Our experienced leadership team drives excellence and innovation across all operations
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {managementTeam.map((member, index) => (
+                <div 
+                  key={index} 
+                  className="bg-card border border-border rounded-lg p-6 text-center hover:border-primary hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                    {member.photo ? (
+                      <img 
+                        src={member.photo} 
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User className="w-12 h-12 text-muted-foreground" />
+                    )}
+                  </div>
+                  <h4 className="text-lg font-heading font-bold text-foreground mb-1">
+                    {member.name}
+                  </h4>
+                  <p className="text-sm text-primary font-medium">
+                    {member.position}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 

@@ -47,7 +47,7 @@ const ContactCTA = () => {
 
         {/* Google Map */}
         <div className="max-w-4xl mx-auto">
-          <GoogleMap height="300px" className="shadow-lg" />
+          <GoogleMap height="350px" className="shadow-lg" />
         </div>
       </div>
     </section>

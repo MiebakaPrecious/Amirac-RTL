@@ -1,20 +1,52 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useGallery, UnifiedGalleryImage } from '@/contexts/GalleryContext';
 import FlipCard from './Home/FlipCard';
 
 const GalleryPreview = () => {
-  const { getRandomImages, loading } = useGallery();
-  const [randomImages, setRandomImages] = useState<UnifiedGalleryImage[]>([]);
+  const { getImagesByGroup, loading, allImages } = useGallery();
+  const [previewImages, setPreviewImages] = useState<UnifiedGalleryImage[]>([]);
   const hasInitialized = useRef(false);
 
-  // Random selection happens only ONCE per page load
+  // Get stable preview images - first 1-2 from each group, max 6 total
+  const stablePreviewImages = useMemo(() => {
+    const groupedImages = getImagesByGroup();
+    const preview: UnifiedGalleryImage[] = [];
+    const groupKeys = Object.keys(groupedImages);
+    
+    // Sort groups for consistent ordering
+    groupKeys.sort();
+    
+    // Take first image from each group until we have 6
+    for (const group of groupKeys) {
+      if (preview.length >= 6) break;
+      const groupImages = groupedImages[group];
+      if (groupImages.length > 0) {
+        preview.push(groupImages[0]);
+      }
+    }
+    
+    // If we still need more, take second images from groups
+    if (preview.length < 6) {
+      for (const group of groupKeys) {
+        if (preview.length >= 6) break;
+        const groupImages = groupedImages[group];
+        if (groupImages.length > 1) {
+          preview.push(groupImages[1]);
+        }
+      }
+    }
+    
+    return preview;
+  }, [getImagesByGroup]);
+
+  // Initialize once when data is ready
   useEffect(() => {
-    if (!loading && !hasInitialized.current) {
-      setRandomImages(getRandomImages(6));
+    if (!loading && !hasInitialized.current && stablePreviewImages.length > 0) {
+      setPreviewImages(stablePreviewImages);
       hasInitialized.current = true;
     }
-  }, [loading, getRandomImages]);
+  }, [loading, stablePreviewImages]);
 
   return (
     <section className="py-20 bg-muted/30">
@@ -37,9 +69,9 @@ const GalleryPreview = () => {
               <div key={i} className="aspect-[4/3] bg-muted animate-pulse rounded-lg" />
             ))}
           </div>
-        ) : randomImages.length > 0 ? (
+        ) : previewImages.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {randomImages.map((item) => (
+            {previewImages.map((item) => (
               <FlipCard key={item.id} item={item} />
             ))}
           </div>
@@ -49,13 +81,13 @@ const GalleryPreview = () => {
           </div>
         )}
 
-        {/* Learn More Button */}
+        {/* View Full Gallery Button */}
         <div className="text-center">
           <Link
             to="/gallery"
             className="inline-block px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors"
           >
-            Learn More →
+            View Full Gallery →
           </Link>
         </div>
       </div>

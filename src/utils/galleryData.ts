@@ -37,23 +37,33 @@ export const serviceGroups: ServiceGroup[] = [
   },
   {
     slug: 'marine-machinery',
-    title: 'Marine Machinery Maintenance',
+    title: 'Marine Machinery & Onboard Ship Maintenance',
     description: 'Complete marine machinery maintenance services for vessels and offshore platforms.',
   },
   {
-    slug: 'welding-training',
-    title: 'Welding Training',
-    description: 'Professional welding certification programs covering pipe welding, fabrication, and argon welding.',
-  },
-  {
-    slug: 'forklift-training',
-    title: 'Forklift Operator Training',
-    description: 'Forklift operator certification training and maintenance services.',
+    slug: 'calibration-pressure-testing',
+    title: 'Calibration & Pressure Testing',
+    description: 'Equipment calibration services and pressure testing for industrial systems.',
   },
   {
     slug: 'electrical-services',
     title: 'Industrial Electrical Services',
     description: 'Complete industrial electrical installation and maintenance services.',
+  },
+  {
+    slug: 'welding-training',
+    title: 'Welding Services & Training',
+    description: 'Professional welding certification programs covering pipe welding, fabrication, and argon welding.',
+  },
+  {
+    slug: 'pneumatic-hydraulic-systems',
+    title: 'Pneumatics & Hydraulics',
+    description: 'Pneumatic and hydraulic systems maintenance, repair, and training services.',
+  },
+  {
+    slug: 'forklift-training',
+    title: 'Forklift Operations',
+    description: 'Forklift operator certification training and maintenance services.',
   },
   {
     slug: 'engine-room-watchkeeping',
@@ -77,29 +87,33 @@ export const serviceGroups: ServiceGroup[] = [
   },
 ];
 
-// Keyword mapping for service group detection from filenames
-const serviceKeywords: Record<string, string[]> = {
-  'industrial-valves-pumps-compressors': ['valve', 'valves', 'pump', 'pumps', 'compressor'],
-  'rotating-static-equipment': ['rotating', 'static', 'equipment'],
-  'heavy-duty-machinery': ['heavy', 'duty', 'machinery'],
-  'marine-machinery': ['marine', 'ship', 'vessel'],
-  'welding-training': ['weld', 'welding'],
-  'forklift-training': ['forklift', 'fork'],
-  'electrical-services': ['electric', 'electrical'],
-  'engine-room-watchkeeping': ['engine', 'room', 'watchkeeping'],
-  'basic-technical-training': ['basic', 'technical', 'training'],
-  'mechanical-technician-practice': ['mechanical', 'technician'],
-  'hero': ['hero'],
-};
+// Priority order for keyword matching (more specific keywords first)
+const serviceKeywordPriority: Array<{ slug: string; keywords: string[] }> = [
+  // More specific matches first
+  { slug: 'calibration-pressure-testing', keywords: ['calibration', 'pressure', 'testing'] },
+  { slug: 'pneumatic-hydraulic-systems', keywords: ['pneumatic', 'hydraulic'] },
+  { slug: 'engine-room-watchkeeping', keywords: ['engine-room', 'watchkeeping', 'watch-keeping'] },
+  { slug: 'mechanical-technician-practice', keywords: ['mechanical-technician', 'technician-practice'] },
+  { slug: 'industrial-valves-pumps-compressors', keywords: ['valve', 'valves', 'pump', 'pumps', 'compressor'] },
+  { slug: 'rotating-static-equipment', keywords: ['rotating', 'static-equipment'] },
+  { slug: 'heavy-duty-machinery', keywords: ['heavy-duty', 'heavy', 'machinery-maintenance'] },
+  { slug: 'marine-machinery', keywords: ['marine', 'ship', 'vessel', 'onboard'] },
+  { slug: 'welding-training', keywords: ['weld', 'welding'] },
+  { slug: 'forklift-training', keywords: ['forklift', 'fork-lift', 'folk-lift'] },
+  { slug: 'electrical-services', keywords: ['electric', 'electrical'] },
+  { slug: 'basic-technical-training', keywords: ['basic-technical', 'technical-skill', 'skill-training'] },
+  { slug: 'mechanical-technician-practice', keywords: ['mechanical', 'technician'] },
+  { slug: 'hero', keywords: ['hero'] },
+];
 
-// Detect service group from filename
-const detectServiceGroup = (filename: string): string => {
-  const lowerFilename = filename.toLowerCase();
+// Detect service group from filename using priority-based matching
+export const detectServiceGroup = (filename: string): string => {
+  const lowerFilename = filename.toLowerCase().replace(/[_\s]/g, '-');
   
-  for (const [group, keywords] of Object.entries(serviceKeywords)) {
+  for (const { slug, keywords } of serviceKeywordPriority) {
     for (const keyword of keywords) {
       if (lowerFilename.includes(keyword)) {
-        return group;
+        return slug;
       }
     }
   }

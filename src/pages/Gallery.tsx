@@ -1,14 +1,62 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { X } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useGallery, UnifiedGalleryImage } from '@/contexts/GalleryContext';
-import { getGroupTitle } from '@/utils/galleryData';
+import { serviceGroups } from '@/utils/galleryData';
+
+// Priority order for displaying service groups
+const serviceDisplayOrder = [
+  'industrial-valves-pumps-compressors',
+  'rotating-static-equipment',
+  'heavy-duty-machinery',
+  'marine-machinery',
+  'calibration-pressure-testing',
+  'electrical-services',
+  'welding-training',
+  'pneumatic-hydraulic-systems',
+  'forklift-training',
+  'engine-room-watchkeeping',
+  'basic-technical-training',
+  'mechanical-technician-practice',
+  'general',
+];
 
 const Gallery = () => {
   const { getImagesByGroup, loading } = useGallery();
   const [selectedImage, setSelectedImage] = useState<UnifiedGalleryImage | null>(null);
-  const groupedImages = getImagesByGroup();
+  
+  // Get grouped images with stable ordering
+  const sortedGroups = useMemo(() => {
+    const groupedImages = getImagesByGroup();
+    const result: Array<{ slug: string; title: string; images: UnifiedGalleryImage[] }> = [];
+    
+    // Add groups in display order
+    for (const slug of serviceDisplayOrder) {
+      if (groupedImages[slug] && groupedImages[slug].length > 0) {
+        const group = serviceGroups.find(g => g.slug === slug);
+        result.push({
+          slug,
+          title: group?.title || slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+          images: groupedImages[slug],
+        });
+      }
+    }
+    
+    // Add any remaining groups not in the display order
+    Object.keys(groupedImages).forEach(slug => {
+      if (!serviceDisplayOrder.includes(slug) && groupedImages[slug].length > 0) {
+        const group = serviceGroups.find(g => g.slug === slug);
+        result.push({
+          slug,
+          title: group?.title || slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+          images: groupedImages[slug],
+        });
+      }
+    });
+    
+    return result;
+  }, [getImagesByGroup]);
 
   return (
     <div className="min-h-screen">
@@ -38,21 +86,24 @@ const Gallery = () => {
                 <div key={i} className="aspect-square bg-muted animate-pulse rounded-lg" />
               ))}
             </div>
-          ) : Object.keys(groupedImages).length === 0 ? (
+          ) : sortedGroups.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
               No gallery images available yet.
             </div>
           ) : (
-            Object.entries(groupedImages).map(([group, groupItems]) => (
-              <div key={group} className="mb-16">
+            sortedGroups.map(({ slug, title, images }) => (
+              <div key={slug} className="mb-16 last:mb-0">
                 <h2 className="text-2xl font-heading font-bold text-primary mb-6 border-l-4 border-primary pl-4">
-                  {getGroupTitle(group)}
+                  {title}
+                  <span className="ml-3 text-sm font-normal text-muted-foreground">
+                    ({images.length} {images.length === 1 ? 'image' : 'images'})
+                  </span>
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {groupItems.map((item) => (
+                  {images.map((item) => (
                     <div
                       key={item.id}
-                      className="group relative aspect-square rounded-lg overflow-hidden cursor-pointer"
+                      className="group relative aspect-square rounded-lg overflow-hidden cursor-pointer shadow-md hover:shadow-lg transition-shadow"
                       onClick={() => setSelectedImage(item)}
                     >
                       <img

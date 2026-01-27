@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { staticGalleryImages, GalleryImage as StaticGalleryImage } from '@/utils/galleryData';
+import { staticGalleryImages, GalleryImage as StaticGalleryImage, serviceGroups, detectServiceGroup } from '@/utils/galleryData';
 
 export interface GalleryItem {
   id: string;
@@ -53,9 +53,10 @@ const convertStaticToUnified = (images: StaticGalleryImage[]): UnifiedGalleryIma
   }));
 };
 
-// Format group slug to title
+// Format group slug to title using serviceGroups
 const formatGroupTitle = (slug: string): string => {
-  return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const group = serviceGroups.find(g => g.slug === slug);
+  return group?.title || slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 };
 
 export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -99,7 +100,7 @@ export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children })
             
             // Only add if not already in table
             if (!tableUrls.has(urlData.publicUrl)) {
-              const serviceGroup = detectServiceGroupFromFilename(file.name);
+              const serviceGroup = detectServiceGroup(file.name);
               storageImages.push({
                 id: `storage-${file.id || file.name}`,
                 url: urlData.publicUrl,
@@ -130,36 +131,6 @@ export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children })
     } finally {
       setLoading(false);
     }
-  };
-
-  // Detect service group from filename
-  const detectServiceGroupFromFilename = (filename: string): string => {
-    const lower = filename.toLowerCase();
-    if (lower.includes('valve') || lower.includes('pump') || lower.includes('compressor')) {
-      return 'industrial-valves-pumps-compressors';
-    }
-    if (lower.includes('rotating') || lower.includes('static')) {
-      return 'rotating-static-equipment';
-    }
-    if (lower.includes('heavy') || lower.includes('machinery')) {
-      return 'heavy-duty-machinery';
-    }
-    if (lower.includes('marine') || lower.includes('ship')) {
-      return 'marine-machinery';
-    }
-    if (lower.includes('weld')) {
-      return 'welding-training';
-    }
-    if (lower.includes('forklift')) {
-      return 'forklift-training';
-    }
-    if (lower.includes('electric')) {
-      return 'electrical-services';
-    }
-    if (lower.includes('hero')) {
-      return 'hero';
-    }
-    return 'general';
   };
 
   useEffect(() => {

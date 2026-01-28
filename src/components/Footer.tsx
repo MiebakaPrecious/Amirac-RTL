@@ -103,9 +103,9 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="border-t border-primary-foreground/10">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col items-center text-center md:flex-row md:justify-between md:text-left gap-4">
             <p className="text-primary-foreground/50 text-sm">
-              © 2025 Amirac Resources and Technologies Ltd. All rights reserved.
+              © 2026 Amirac Resources and Technologies Ltd. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a href="#" className="text-primary-foreground/50 text-sm hover:text-accent transition-colors">

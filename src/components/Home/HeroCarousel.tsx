@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useGallery } from '@/contexts/GalleryContext';
 
-interface HeroCarouselProps {
-  onPlayVideo: () => void;
-}
-
-const HeroCarousel = ({ onPlayVideo }: HeroCarouselProps) => {
+const HeroCarousel = () => {
   const { items } = useGallery();
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -51,31 +47,16 @@ const HeroCarousel = ({ onPlayVideo }: HeroCarouselProps) => {
           
           {/* Slide Content */}
           <div className="absolute inset-0 flex items-center justify-center">
-            {index === 0 ? (
-              <div className="text-center">
-                <button
-                  onClick={onPlayVideo}
-                  className="w-20 h-20 bg-primary text-primary-foreground rounded-full flex items-center justify-center mb-4 mx-auto hover:scale-110 transition-transform shadow-lg"
-                >
-                  <Play className="w-8 h-8 ml-1" fill="currentColor" />
-                </button>
-                <div className="text-white">
-                  <p className="text-sm opacity-80">Watch Video</p>
-                  <p className="font-semibold text-lg">Why Choose Us?</p>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center px-8 max-w-md bg-black/40 backdrop-blur-sm p-6 rounded-lg">
-                <h3 className="text-2xl font-heading font-bold text-white mb-4">
-                  Amirac Resources & Technologies
-                </h3>
-                <p className="text-white/90 text-sm leading-relaxed">
-                  A premier engineering company delivering top-tier maintenance, 
-                  training, and technical solutions across marine and industrial sectors 
-                  in Nigeria and beyond.
-                </p>
-              </div>
-            )}
+            <div className="text-center px-8 max-w-md bg-black/40 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-2xl font-heading font-bold text-white mb-4">
+                Amirac Resources & Technologies
+              </h3>
+              <p className="text-white/90 text-sm leading-relaxed">
+                A premier engineering company delivering top-tier maintenance, 
+                training, and technical solutions across marine and industrial sectors 
+                in Nigeria and beyond.
+              </p>
+            </div>
           </div>
         </div>
       ))}

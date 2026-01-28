@@ -1,11 +1,7 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ModalVideo from './ModalVideo';
 import HeroCarousel from './Home/HeroCarousel';
 
 const HeroNew = () => {
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
-
   return (
     <>
       <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
@@ -49,7 +45,7 @@ const HeroNew = () => {
             
             {/* Right Content - Slideshow */}
             <div className="hidden lg:block relative">
-              <HeroCarousel onPlayVideo={() => setIsVideoOpen(true)} />
+              <HeroCarousel />
             </div>
           </div>
         </div>
@@ -71,12 +67,6 @@ const HeroNew = () => {
           </div>
         </div>
       </section>
-
-      <ModalVideo
-        videoUrl="https://www.youtube.com/embed/dQw4w9WgXcQ"
-        isOpen={isVideoOpen}
-        onClose={() => setIsVideoOpen(false)}
-      />
     </>
   );
 };

@@ -7,15 +7,15 @@ import GoogleMap from '@/components/GoogleMap';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { contactInfo } from '@/utils/contactInfo';
-import { services } from '@/utils/servicesData';
+import { engineeringServices, trainingCourses } from '@/utils/servicesData';
 
 const contactSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
   email: z.string().email('Please enter a valid email'),
   phone: z.string().optional(),
-  serviceOfInterest: z.string().optional(),
+  purposeOfContact: z.string().min(1, 'Please select a purpose'),
+  selectedService: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters').max(1000),
-  registerForTraining: z.boolean().default(false),
 });
 
 const Contact = () => {
@@ -26,9 +26,9 @@ const Contact = () => {
     fullName: '',
     email: '',
     phone: '',
-    serviceOfInterest: '',
+    purposeOfContact: '',
+    selectedService: '',
     message: '',
-    registerForTraining: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -40,13 +40,17 @@ const Contact = () => {
       const validated = contactSchema.parse(formData);
       setIsSubmitting(true);
 
+      const serviceInfo = validated.purposeOfContact === 'training' 
+        ? `Training: ${validated.selectedService}` 
+        : `Engineering: ${validated.selectedService}`;
+      
       const { error } = await supabase.from('contacts').insert({
         full_name: validated.fullName,
         email: validated.email,
         phone: validated.phone || null,
-        service_of_interest: validated.serviceOfInterest || null,
+        service_of_interest: serviceInfo || null,
         message: validated.message,
-        register_for_training: validated.registerForTraining,
+        register_for_training: validated.purposeOfContact === 'training',
       });
 
       if (error) throw error;
@@ -61,9 +65,9 @@ const Contact = () => {
         fullName: '',
         email: '',
         phone: '',
-        serviceOfInterest: '',
+        purposeOfContact: '',
+        selectedService: '',
         message: '',
-        registerForTraining: false,
       });
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -258,21 +262,59 @@ const Contact = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Service of Interest
+                      Purpose of Contact *
                     </label>
                     <select
-                      value={formData.serviceOfInterest}
-                      onChange={(e) => setFormData({ ...formData, serviceOfInterest: e.target.value })}
+                      value={formData.purposeOfContact}
+                      onChange={(e) => setFormData({ ...formData, purposeOfContact: e.target.value, selectedService: '' })}
                       className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
                     >
-                      <option value="">Select a service</option>
-                      {services.map((service, index) => (
-                        <option key={index} value={service.title}>
-                          {service.title}
-                        </option>
-                      ))}
+                      <option value="">Select purpose</option>
+                      <option value="training">Training Registration</option>
+                      <option value="engineering">Engineering Services</option>
                     </select>
+                    {errors.purposeOfContact && <p className="text-red-500 text-sm mt-1">{errors.purposeOfContact}</p>}
                   </div>
+
+                  {formData.purposeOfContact === 'training' && (
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Select Training Course
+                      </label>
+                      <select
+                        value={formData.selectedService}
+                        onChange={(e) => setFormData({ ...formData, selectedService: e.target.value })}
+                        className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
+                      >
+                        <option value="">Select a training course</option>
+                        {trainingCourses.map((course, index) => (
+                          <option key={index} value={course.title}>
+                            {course.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {formData.purposeOfContact === 'engineering' && (
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Select Engineering Service
+                      </label>
+                      <select
+                        value={formData.selectedService}
+                        onChange={(e) => setFormData({ ...formData, selectedService: e.target.value })}
+                        className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
+                      >
+                        <option value="">Select a service</option>
+                        {engineeringServices.map((service, index) => (
+                          <option key={index} value={service.title}>
+                            {service.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
@@ -286,19 +328,6 @@ const Contact = () => {
                       placeholder="Tell us about your project or inquiry..."
                     />
                     {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      id="training"
-                      checked={formData.registerForTraining}
-                      onChange={(e) => setFormData({ ...formData, registerForTraining: e.target.checked })}
-                      className="w-5 h-5 rounded border-border text-primary focus:ring-primary"
-                    />
-                    <label htmlFor="training" className="text-sm text-foreground">
-                      I'm interested in registering for training programs
-                    </label>
                   </div>
 
                   <button

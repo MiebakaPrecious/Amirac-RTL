@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
-import { CheckCircle, Target, Eye, Heart, User } from 'lucide-react';
+import { CheckCircle, Target, Eye, Heart } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import aboutImage from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-2.jpeg';
+import directorPhoto from '@/assets/team/director.jpg';
+import technicalManagerPhoto from '@/assets/team/technical-manager.jpg';
+import hrManagerPhoto from '@/assets/team/hr-manager.jpg';
+import secretaryPhoto from '@/assets/team/secretary.jpg';
 
 const coreValues = [
   { icon: Target, title: 'Excellence', description: 'Delivering the highest quality in every project and service.' },
@@ -13,24 +17,24 @@ const coreValues = [
 
 const managementTeam = [
   {
-    name: 'Engr. Amara Okonkwo',
-    position: 'Managing Director / CEO',
-    photo: null,
+    name: 'Uhegbu Amaechi Simon',
+    position: 'Director',
+    photo: directorPhoto,
   },
   {
-    name: 'Engr. Chukwudi Eze',
-    position: 'Technical Director',
-    photo: null,
+    name: 'Engr. Iyalla Ipalibo',
+    position: 'Technical Manager',
+    photo: technicalManagerPhoto,
   },
   {
-    name: 'Mrs. Adaeze Nwosu',
-    position: 'Operations Manager',
-    photo: null,
+    name: 'Nte Jonathan',
+    position: 'Human Resources Manager',
+    photo: hrManagerPhoto,
   },
   {
-    name: 'Mr. Emeka Okoro',
-    position: 'Training Coordinator',
-    photo: null,
+    name: 'Asuquo Deborah',
+    position: 'Secretary',
+    photo: secretaryPhoto,
   },
 ];
 
@@ -107,16 +111,13 @@ const About = () => {
                   key={index} 
                   className="bg-card border border-border rounded-lg p-6 text-center hover:border-primary hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                    {member.photo ? (
-                      <img 
-                        src={member.photo} 
-                        alt={member.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <User className="w-12 h-12 text-muted-foreground" />
-                    )}
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                    <img 
+                      src={member.photo} 
+                      alt={member.name}
+                      loading="lazy"
+                      className="w-full h-full object-cover object-top"
+                    />
                   </div>
                   <h4 className="text-lg font-heading font-bold text-foreground mb-1">
                     {member.name}

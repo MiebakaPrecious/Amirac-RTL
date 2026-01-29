@@ -49,14 +49,8 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden lg:block">
-            <Link to="/contact">
-              <Button className="bg-primary text-primary-foreground font-semibold px-6 py-5 hover:bg-primary/90">
-                Get Quote
-              </Button>
-            </Link>
-          </div>
+          {/* Empty space for balanced layout */}
+          <div className="hidden lg:block w-24" />
 
           {/* Mobile Menu Button */}
           <button className="lg:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -80,9 +74,6 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
-                <Button className="bg-primary text-primary-foreground w-full mt-4">Get Quote</Button>
-              </Link>
             </nav>
           </div>
         )}

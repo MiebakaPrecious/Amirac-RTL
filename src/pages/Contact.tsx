@@ -1,92 +1,78 @@
 import { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle, GraduationCap, Wrench } from 'lucide-react';
-import { z } from 'zod';
+import { GraduationCap, Wrench, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import GoogleMap from '@/components/GoogleMap';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { contactInfo } from '@/utils/contactInfo';
-import { engineeringServices, trainingCourses } from '@/utils/servicesData';
+import ContactInfoSection from '@/components/Contact/ContactInfoSection';
+import TrainingRegistrationForm from '@/components/Contact/TrainingRegistrationForm';
+import EngineeringServicesForm from '@/components/Contact/EngineeringServicesForm';
 
-const contactSchema = z.object({
-  fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
-  email: z.string().email('Please enter a valid email'),
-  phone: z.string().optional(),
-  purposeOfContact: z.string().min(1, 'Please select a purpose'),
-  selectedService: z.string().optional(),
-  message: z.string().min(10, 'Message must be at least 10 characters').max(1000),
-});
+type FormType = 'none' | 'training' | 'engineering';
+
+const GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/8vyhKt7LMQd3km7i8';
 
 const Contact = () => {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    purposeOfContact: '',
-    selectedService: '',
-    message: '',
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [activeForm, setActiveForm] = useState<FormType>('none');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
+  const renderFormSection = () => {
+    switch (activeForm) {
+      case 'training':
+        return <TrainingRegistrationForm onBack={() => setActiveForm('none')} />;
+      case 'engineering':
+        return <EngineeringServicesForm onBack={() => setActiveForm('none')} />;
+      default:
+        return (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-heading font-bold text-foreground mb-6">
+              How Can We Help You?
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              Select an option below to get started with your inquiry.
+            </p>
+            
+            {/* Training Registration Card */}
+            <button
+              onClick={() => setActiveForm('training')}
+              className="w-full bg-accent/10 border-2 border-accent/30 rounded-xl p-6 text-left hover:border-accent hover:shadow-lg transition-all duration-300 group"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                  <GraduationCap className="w-7 h-7 text-accent group-hover:text-accent-foreground" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-heading font-bold text-foreground text-lg mb-1 flex items-center gap-2">
+                    Register for Training
+                    <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    Enroll in our professional training programs for skill development and certification.
+                  </p>
+                </div>
+              </div>
+            </button>
 
-    try {
-      const validated = contactSchema.parse(formData);
-      setIsSubmitting(true);
-
-      const serviceInfo = validated.purposeOfContact === 'training' 
-        ? `Training: ${validated.selectedService}` 
-        : `Engineering: ${validated.selectedService}`;
-      
-      const { error } = await supabase.from('contacts').insert({
-        full_name: validated.fullName,
-        email: validated.email,
-        phone: validated.phone || null,
-        service_of_interest: serviceInfo || null,
-        message: validated.message,
-        register_for_training: validated.purposeOfContact === 'training',
-      });
-
-      if (error) throw error;
-
-      setIsSuccess(true);
-      toast({
-        title: 'Message Sent!',
-        description: 'Thank you for contacting us. We will get back to you soon.',
-      });
-      
-      setFormData({
-        fullName: '',
-        email: '',
-        phone: '',
-        purposeOfContact: '',
-        selectedService: '',
-        message: '',
-      });
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        const fieldErrors: Record<string, string> = {};
-        err.errors.forEach((error) => {
-          if (error.path[0]) {
-            fieldErrors[error.path[0] as string] = error.message;
-          }
-        });
-        setErrors(fieldErrors);
-      } else {
-        toast({
-          title: 'Error',
-          description: 'Failed to send message. Please try again.',
-          variant: 'destructive',
-        });
-      }
-    } finally {
-      setIsSubmitting(false);
+            {/* Engineering Services Card */}
+            <button
+              onClick={() => setActiveForm('engineering')}
+              className="w-full bg-primary/10 border-2 border-primary/30 rounded-xl p-6 text-left hover:border-primary hover:shadow-lg transition-all duration-300 group"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <Wrench className="w-7 h-7 text-primary group-hover:text-primary-foreground" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-heading font-bold text-foreground text-lg mb-1 flex items-center gap-2">
+                    Book Engineering Services
+                    <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    Request our engineering solutions for your industrial and commercial projects.
+                  </p>
+                </div>
+              </div>
+            </button>
+          </div>
+        );
     }
   };
 
@@ -106,19 +92,27 @@ const Contact = () => {
               Have a question or want to work with us? We'd love to hear from you.
             </p>
             
-            {/* Quick Action Cards */}
-            <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-              <div className="bg-accent/10 border-2 border-accent/30 rounded-xl p-6 text-center">
-                <GraduationCap className="w-10 h-10 text-accent mx-auto mb-3" />
-                <h3 className="font-heading font-bold text-foreground mb-2">Register for Training</h3>
-                <p className="text-sm text-muted-foreground">Enroll in our professional training programs</p>
+            {/* Quick Action Cards - Only show when no form is active */}
+            {activeForm === 'none' && (
+              <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                <button
+                  onClick={() => setActiveForm('training')}
+                  className="bg-accent/10 border-2 border-accent/30 rounded-xl p-6 text-center hover:border-accent hover:shadow-lg transition-all duration-300 cursor-pointer"
+                >
+                  <GraduationCap className="w-10 h-10 text-accent mx-auto mb-3" />
+                  <h3 className="font-heading font-bold text-foreground mb-2">Register for Training</h3>
+                  <p className="text-sm text-muted-foreground">Enroll in our professional training programs</p>
+                </button>
+                <button
+                  onClick={() => setActiveForm('engineering')}
+                  className="bg-primary/10 border-2 border-primary/30 rounded-xl p-6 text-center hover:border-primary hover:shadow-lg transition-all duration-300 cursor-pointer"
+                >
+                  <Wrench className="w-10 h-10 text-primary mx-auto mb-3" />
+                  <h3 className="font-heading font-bold text-foreground mb-2">Book Engineering Services</h3>
+                  <p className="text-sm text-muted-foreground">Request our engineering solutions</p>
+                </button>
               </div>
-              <div className="bg-primary/10 border-2 border-primary/30 rounded-xl p-6 text-center">
-                <Wrench className="w-10 h-10 text-primary mx-auto mb-3" />
-                <h3 className="font-heading font-bold text-foreground mb-2">Book Engineering Services</h3>
-                <p className="text-sm text-muted-foreground">Request our engineering solutions</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -128,227 +122,11 @@ const Contact = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Info */}
-            <div>
-              <h2 className="text-2xl font-heading font-bold text-primary mb-8">
-                Contact Information
-              </h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">Phone</h3>
-                    <div className="flex flex-col gap-1">
-                      {contactInfo.phoneNumbers.map((phone, index) => (
-                        <a 
-                          key={index} 
-                          href={`tel:${phone}`} 
-                          className="text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {phone}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+            <ContactInfoSection />
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                    <a href={`mailto:${contactInfo.email}`} className="text-muted-foreground hover:text-primary transition-colors">
-                      {contactInfo.email}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">Address</h3>
-                    <p className="text-muted-foreground">
-                      {contactInfo.address}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">Business Hours</h3>
-                    <p className="text-muted-foreground">
-                      {contactInfo.businessHours.weekdays}<br />
-                      {contactInfo.businessHours.saturday}<br />
-                      {contactInfo.businessHours.sunday}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Contact Form */}
+            {/* Form Section */}
             <div className="bg-card p-8 rounded-lg border border-border">
-              {isSuccess ? (
-                <div className="text-center py-12">
-                  <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-2xl font-heading font-bold text-foreground mb-2">
-                    Thank You!
-                  </h3>
-                  <p className="text-muted-foreground mb-6">
-                    Your message has been sent successfully. We'll get back to you soon.
-                  </p>
-                  <button
-                    onClick={() => setIsSuccess(false)}
-                    className="px-6 py-3 bg-primary text-primary-foreground rounded-md font-semibold hover:bg-primary/90 transition-colors"
-                  >
-                    Send Another Message
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <h2 className="text-2xl font-heading font-bold text-foreground mb-6">
-                    Send Us a Message
-                  </h2>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
-                      placeholder="Your full name"
-                    />
-                    {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
-                        placeholder="your@email.com"
-                      />
-                      {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Phone
-                      </label>
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
-                        placeholder="Your phone number"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Purpose of Contact *
-                    </label>
-                    <select
-                      value={formData.purposeOfContact}
-                      onChange={(e) => setFormData({ ...formData, purposeOfContact: e.target.value, selectedService: '' })}
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
-                    >
-                      <option value="">Select purpose</option>
-                      <option value="training">Training Registration</option>
-                      <option value="engineering">Engineering Services</option>
-                    </select>
-                    {errors.purposeOfContact && <p className="text-red-500 text-sm mt-1">{errors.purposeOfContact}</p>}
-                  </div>
-
-                  {formData.purposeOfContact === 'training' && (
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Select Training Course
-                      </label>
-                      <select
-                        value={formData.selectedService}
-                        onChange={(e) => setFormData({ ...formData, selectedService: e.target.value })}
-                        className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
-                      >
-                        <option value="">Select a training course</option>
-                        {trainingCourses.map((course, index) => (
-                          <option key={index} value={course.title}>
-                            {course.title}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {formData.purposeOfContact === 'engineering' && (
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Select Engineering Service
-                      </label>
-                      <select
-                        value={formData.selectedService}
-                        onChange={(e) => setFormData({ ...formData, selectedService: e.target.value })}
-                        className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
-                      >
-                        <option value="">Select a service</option>
-                        {engineeringServices.map((service, index) => (
-                          <option key={index} value={service.title}>
-                            {service.title}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Message *
-                    </label>
-                    <textarea
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      rows={5}
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors resize-none"
-                      placeholder="Tell us about your project or inquiry..."
-                    />
-                    {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full px-6 py-4 bg-primary text-primary-foreground font-bold rounded-lg shadow-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="animate-spin w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full" />
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-5 h-5" />
-                        Send Message
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
+              {renderFormSection()}
             </div>
           </div>
 
@@ -360,7 +138,7 @@ const Contact = () => {
             <GoogleMap height="450px" />
             <p className="text-sm text-muted-foreground mt-4 text-center">
               <a 
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`}
+                href={GOOGLE_MAPS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors underline"

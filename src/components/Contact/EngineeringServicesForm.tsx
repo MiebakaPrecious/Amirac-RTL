@@ -42,7 +42,8 @@ const EngineeringServicesForm = ({ onBack }: EngineeringServicesFormProps) => {
       const serviceInfo = `Engineering: ${validated.selectedService}`;
       const messageContent = `Project Description: ${validated.projectDescription}\nPreferred Contact: ${validated.preferredContact}`;
       
-      const { error } = await supabase.from('contacts').insert({
+      // Save to database
+      const { error: dbError } = await supabase.from('contacts').insert({
         full_name: validated.companyName,
         email: validated.email,
         phone: validated.phone,
@@ -51,7 +52,29 @@ const EngineeringServicesForm = ({ onBack }: EngineeringServicesFormProps) => {
         register_for_training: false,
       });
 
-      if (error) throw error;
+      if (dbError) {
+        console.error('Database error:', dbError);
+      }
+
+      // Send email notification
+      try {
+        const emailResponse = await supabase.functions.invoke('send-contact-email', {
+          body: {
+            fullName: validated.companyName,
+            email: validated.email,
+            phone: validated.phone,
+            serviceOfInterest: validated.selectedService,
+            message: `Project Description: ${validated.projectDescription}\nPreferred Contact: ${validated.preferredContact}`,
+            isTrainingRegistration: false,
+          },
+        });
+
+        if (emailResponse.error) {
+          console.error('Email notification error:', emailResponse.error);
+        }
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+      }
 
       toast({
         title: 'Request Submitted!',

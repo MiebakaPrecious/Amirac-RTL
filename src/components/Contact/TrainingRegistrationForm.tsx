@@ -41,7 +41,8 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
 
       const serviceInfo = `Training: ${validated.selectedCourse} (${validated.trainingMode})`;
       
-      const { error } = await supabase.from('contacts').insert({
+      // Save to database
+      const { error: dbError } = await supabase.from('contacts').insert({
         full_name: validated.fullName,
         email: validated.email,
         phone: validated.phone,
@@ -50,7 +51,30 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
         register_for_training: true,
       });
 
-      if (error) throw error;
+      if (dbError) {
+        console.error('Database error:', dbError);
+      }
+
+      // Send email notification
+      try {
+        const emailResponse = await supabase.functions.invoke('send-contact-email', {
+          body: {
+            fullName: validated.fullName,
+            email: validated.email,
+            phone: validated.phone,
+            serviceOfInterest: validated.selectedCourse,
+            message: validated.message,
+            isTrainingRegistration: true,
+            trainingMode: validated.trainingMode,
+          },
+        });
+
+        if (emailResponse.error) {
+          console.error('Email notification error:', emailResponse.error);
+        }
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+      }
 
       toast({
         title: 'Registration Submitted!',

@@ -60,8 +60,8 @@ const HeroNew = () => {
                 </svg>
               </div>
               <div>
-                <span className="text-xs text-primary-foreground/80 block">Excellence in Engineering</span>
-                <span className="text-sm font-semibold">Committed to superior quality and results</span>
+                <span className="text-xs text-primary-foreground/80 block">Engineering Excellence Delivered</span>
+                <span className="text-sm font-semibold">Training and Maintenance</span>
               </div>
             </div>
           </div>

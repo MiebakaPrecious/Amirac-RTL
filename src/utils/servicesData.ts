@@ -40,6 +40,18 @@ export const engineeringServices: ServiceItem[] = [
     category: 'engineering',
   },
   {
+    icon: Anchor,
+    title: 'Marine Engineering',
+    description: 'Comprehensive marine engineering services for ship systems, propulsion, hull integrity, and maritime equipment design and maintenance.',
+    category: 'engineering',
+  },
+  {
+    icon: Settings,
+    title: 'Platform Machinery Maintenance',
+    description: 'Specialized maintenance and repair services for offshore platform machinery, ensuring operational efficiency and safety compliance.',
+    category: 'engineering',
+  },
+  {
     icon: Wrench,
     title: 'Industrial Equipment and Machine Maintenance',
     description: 'General industrial equipment maintenance covering all aspects of machine upkeep, repair, and performance enhancement.',
@@ -167,6 +179,12 @@ export const trainingCourses: ServiceItem[] = [
     icon: FileText,
     title: 'Technical Reports Formation (Writing & Presentation)',
     description: 'Professional training on technical report writing, documentation standards, and effective presentation skills.',
+    category: 'training',
+  },
+  {
+    icon: Flame,
+    title: 'Basic Welding Training',
+    description: 'Foundational welding training covering arc welding, MIG/TIG techniques, safety protocols, and metal joining fundamentals.',
     category: 'training',
   },
 ];

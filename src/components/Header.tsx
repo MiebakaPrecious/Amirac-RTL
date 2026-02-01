@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.svg";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -25,8 +25,7 @@ const Header = () => {
             <img 
               src={logo} 
               alt="Amirac Resources and Technologies Ltd" 
-              className="h-12 w-auto object-contain" 
-              style={{ background: 'transparent' }}
+              className="h-10 w-10 object-contain" 
             />
             <div className="flex flex-col">
               <span className="text-lg font-heading font-bold text-primary tracking-wide">AMIRAC</span>

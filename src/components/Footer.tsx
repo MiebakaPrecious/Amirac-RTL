@@ -1,6 +1,6 @@
 import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.svg";
 import { contactInfo } from "@/utils/contactInfo";
 import { services } from "@/utils/servicesData";
 
@@ -19,8 +19,7 @@ const Footer = () => {
               <img 
                 src={logo} 
                 alt="Amirac Resources and Technologies Ltd" 
-                className="h-12 w-auto object-contain" 
-                style={{ background: 'transparent' }}
+                className="h-10 w-10 object-contain" 
               />
               <div className="flex flex-col">
                 <span className="text-lg font-heading font-bold tracking-wide">AMIRAC</span>

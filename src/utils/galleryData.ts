@@ -62,12 +62,12 @@ export const serviceGroups: ServiceGroup[] = [
   },
   {
     slug: 'forklift-training',
-    title: 'Forklift Operations',
+    title: 'Lifting Operations',
     description: 'Forklift operator certification training and maintenance services.',
   },
   {
     slug: 'engine-room-watchkeeping',
-    title: 'Engine Room Watch Keeping Practice',
+    title: 'Workshop Practice',
     description: 'Engine room watch keeping training and practice for marine operations.',
   },
   {

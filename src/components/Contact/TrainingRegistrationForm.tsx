@@ -4,6 +4,27 @@ import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { trainingCourses } from '@/utils/servicesData';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+
+const durationOptions = [
+  '1 Week',
+  '2 Weeks',
+  '1 Month',
+  '3 Months',
+  '4 Months',
+  '6 Months',
+  '1 Year',
+];
+
+const dayOptions = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 
 const trainingSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
@@ -11,6 +32,8 @@ const trainingSchema = z.object({
   phone: z.string().min(10, 'Please enter a valid phone number'),
   selectedCourse: z.string().min(1, 'Please select a training course'),
   trainingMode: z.string().min(1, 'Please select a training mode'),
+  trainingDuration: z.string().min(1, 'Please select a training duration'),
+  trainingDays: z.array(z.string()).min(1, 'Please select at least one day'),
   message: z.string().optional(),
 });
 
@@ -27,6 +50,8 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
     phone: '',
     selectedCourse: '',
     trainingMode: '',
+    trainingDuration: '',
+    trainingDays: [] as string[],
     message: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -66,6 +91,8 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
             message: validated.message,
             isTrainingRegistration: true,
             trainingMode: validated.trainingMode,
+            trainingDuration: validated.trainingDuration,
+            trainingDays: validated.trainingDays,
           },
         });
 
@@ -87,6 +114,8 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
         phone: '',
         selectedCourse: '',
         trainingMode: '',
+        trainingDuration: '',
+        trainingDays: [],
         message: '',
       });
       onBack();
@@ -205,6 +234,64 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
             <option value="Online">Online (Virtual)</option>
           </select>
           {errors.trainingMode && <p className="text-destructive text-sm mt-1">{errors.trainingMode}</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-foreground mb-2">
+            Training Duration *
+          </label>
+          <select
+            value={formData.trainingDuration}
+            onChange={(e) => setFormData({ ...formData, trainingDuration: e.target.value })}
+            className="w-full px-4 py-3 rounded-md border border-border bg-background text-foreground focus:border-primary focus:outline-none transition-colors"
+          >
+            <option value="">Select training duration</option>
+            {durationOptions.map((duration) => (
+              <option key={duration} value={duration}>
+                {duration}
+              </option>
+            ))}
+          </select>
+          {errors.trainingDuration && <p className="text-destructive text-sm mt-1">{errors.trainingDuration}</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-foreground mb-2">
+            Training Days *
+          </label>
+          <p className="text-sm text-muted-foreground mb-3">
+            Select one or more days that are convenient for you.
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {dayOptions.map((day) => (
+              <div key={day} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`day-${day}`}
+                  checked={formData.trainingDays.includes(day)}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setFormData({
+                        ...formData,
+                        trainingDays: [...formData.trainingDays, day],
+                      });
+                    } else {
+                      setFormData({
+                        ...formData,
+                        trainingDays: formData.trainingDays.filter((d) => d !== day),
+                      });
+                    }
+                  }}
+                />
+                <Label
+                  htmlFor={`day-${day}`}
+                  className="text-sm font-normal cursor-pointer"
+                >
+                  {day}
+                </Label>
+              </div>
+            ))}
+          </div>
+          {errors.trainingDays && <p className="text-destructive text-sm mt-1">{errors.trainingDays}</p>}
         </div>
 
         <div>

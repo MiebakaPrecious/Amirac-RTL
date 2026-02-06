@@ -16,6 +16,8 @@ interface ContactFormRequest {
   message?: string;
   isTrainingRegistration: boolean;
   trainingMode?: string;
+  trainingDuration?: string;
+  trainingDays?: string[];
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -96,6 +98,26 @@ const handler = async (req: Request): Promise<Response> => {
               </td>
               <td style="padding: 10px 0; border-bottom: 1px solid #dee2e6;">
                 ${formData.trainingMode}
+              </td>
+            </tr>
+            ` : ""}
+            ${formData.trainingDuration ? `
+            <tr>
+              <td style="padding: 10px 0; border-bottom: 1px solid #dee2e6; font-weight: bold; color: #1e3a5f;">
+                Training Duration:
+              </td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #dee2e6;">
+                ${formData.trainingDuration}
+              </td>
+            </tr>
+            ` : ""}
+            ${formData.trainingDays && formData.trainingDays.length > 0 ? `
+            <tr>
+              <td style="padding: 10px 0; border-bottom: 1px solid #dee2e6; font-weight: bold; color: #1e3a5f;">
+                Preferred Training Days:
+              </td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #dee2e6;">
+                ${formData.trainingDays.join(", ")}
               </td>
             </tr>
             ` : ""}

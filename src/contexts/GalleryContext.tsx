@@ -31,11 +31,29 @@ interface GalleryContextType {
 
 const GalleryContext = createContext<GalleryContextType | undefined>(undefined);
 
-// Convert Supabase items to unified format
+// Helper to add Supabase image transformation params for optimization
+const optimizeSupabaseImageUrl = (url: string, width: number = 800): string => {
+  // Only transform Supabase storage URLs
+  if (!url.includes('supabase.co/storage/v1/object/public/')) {
+    return url;
+  }
+  
+  // Convert public URL to render/image URL for transformations
+  // From: .../storage/v1/object/public/bucket/file
+  // To: .../storage/v1/render/image/public/bucket/file?width=X&quality=80
+  const transformedUrl = url.replace(
+    '/storage/v1/object/public/',
+    '/storage/v1/render/image/public/'
+  );
+  
+  return `${transformedUrl}?width=${width}&quality=80`;
+};
+
+// Convert Supabase items to unified format with optimized URLs
 const convertSupabaseToUnified = (items: GalleryItem[]): UnifiedGalleryImage[] => {
   return items.map(item => ({
     id: `supabase-${item.id}`,
-    src: item.url,
+    src: optimizeSupabaseImageUrl(item.url, 800),
     group: item.service_group,
     title: formatGroupTitle(item.service_group),
     description: item.description || `Professional ${formatGroupTitle(item.service_group).toLowerCase()} services.`,
@@ -103,7 +121,7 @@ export const GalleryProvider: React.FC<{ children: ReactNode }> = ({ children })
               const serviceGroup = detectServiceGroup(file.name);
               storageImages.push({
                 id: `storage-${file.id || file.name}`,
-                url: urlData.publicUrl,
+                url: urlData.publicUrl, // Keep original URL, optimization happens in convertSupabaseToUnified
                 filename: file.name,
                 service_group: serviceGroup,
                 description: null,

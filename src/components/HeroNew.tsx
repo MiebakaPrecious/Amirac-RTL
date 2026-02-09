@@ -60,8 +60,8 @@ const HeroNew = () => {
                 </svg>
               </div>
               <div>
-                <span className="text-xs text-primary-foreground/80 block">Engineering Excellence Delivered</span>
-                <span className="text-sm font-semibold">Training and Maintenance</span>
+                <span className="text-xs text-primary-foreground/80 block">We offer Maintenance Services and Training Academy</span>
+                <span className="text-sm font-semibold">Certificate courses available in Amirac Training Academy</span>
               </div>
             </div>
           </div>

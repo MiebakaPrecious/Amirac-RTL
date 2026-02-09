@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { trainingCourses } from '@/utils/servicesData';
+import { sendEmailJS } from '@/utils/emailjs';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 
@@ -80,32 +81,26 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
         console.error('Database error:', dbError);
       }
 
-      // Send email notification
+      // Send email via EmailJS
       try {
-        const emailResponse = await supabase.functions.invoke('send-contact-email', {
-          body: {
-            fullName: validated.fullName,
-            email: validated.email,
-            phone: validated.phone,
-            serviceOfInterest: validated.selectedCourse,
-            message: validated.message,
-            isTrainingRegistration: true,
-            trainingMode: validated.trainingMode,
-            trainingDuration: validated.trainingDuration,
-            trainingDays: validated.trainingDays,
-          },
+        await sendEmailJS({
+          full_name: validated.fullName,
+          email: validated.email,
+          phone: validated.phone,
+          service_type: 'Training Registration',
+          selected_service: validated.selectedCourse,
+          training_duration: validated.trainingDuration,
+          training_days: validated.trainingDays.join(', '),
+          training_mode: validated.trainingMode,
+          message: validated.message || 'N/A',
         });
-
-        if (emailResponse.error) {
-          console.error('Email notification error:', emailResponse.error);
-        }
       } catch (emailError) {
-        console.error('Failed to send email notification:', emailError);
+        console.error('EmailJS error:', emailError);
       }
 
       toast({
         title: 'Registration Submitted!',
-        description: 'Thank you for registering. We will contact you shortly.',
+        description: 'Your request has been submitted successfully. We will contact you shortly.',
       });
       
       setFormData({

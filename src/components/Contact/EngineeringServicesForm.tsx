@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { engineeringServices } from '@/utils/servicesData';
+import { sendEmailJS } from '@/utils/emailjs';
 
 const engineeringSchema = z.object({
   companyName: z.string().min(2, 'Name must be at least 2 characters').max(100),
@@ -56,29 +57,26 @@ const EngineeringServicesForm = ({ onBack }: EngineeringServicesFormProps) => {
         console.error('Database error:', dbError);
       }
 
-      // Send email notification
+      // Send email via EmailJS
       try {
-        const emailResponse = await supabase.functions.invoke('send-contact-email', {
-          body: {
-            fullName: validated.companyName,
-            email: validated.email,
-            phone: validated.phone,
-            serviceOfInterest: validated.selectedService,
-            message: `Project Description: ${validated.projectDescription}\nPreferred Contact: ${validated.preferredContact}`,
-            isTrainingRegistration: false,
-          },
+        await sendEmailJS({
+          full_name: validated.companyName,
+          email: validated.email,
+          phone: validated.phone,
+          service_type: 'Engineering Services',
+          selected_service: validated.selectedService,
+          training_duration: 'N/A',
+          training_days: 'N/A',
+          training_mode: 'N/A',
+          message: `Project Description: ${validated.projectDescription}\nPreferred Contact: ${validated.preferredContact}`,
         });
-
-        if (emailResponse.error) {
-          console.error('Email notification error:', emailResponse.error);
-        }
       } catch (emailError) {
-        console.error('Failed to send email notification:', emailError);
+        console.error('EmailJS error:', emailError);
       }
 
       toast({
         title: 'Request Submitted!',
-        description: 'Thank you for your inquiry. We will contact you shortly.',
+        description: 'Your request has been submitted successfully. We will contact you shortly.',
       });
       
       setFormData({

@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, Target, Eye, Heart } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import aboutImage from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-2.jpeg';
-import directorPhoto from '@/assets/team/director.jpg';
-import technicalManagerPhoto from '@/assets/team/technical-manager.jpg';
-import hrManagerPhoto from '@/assets/team/hr-manager.jpg';
-import secretaryPhoto from '@/assets/team/secretary.jpg';
+const aboutImage = "/assets/gallery/industrial-valves/industrial-valves-pumps-compressor-01.jpeg";
+const directorPhoto = "/assets/management/uhegbu-amaechi-simon/director.jpg";
+const technicalManagerPhoto = "/assets/management/engr-iyalla-ipalibo/technical-manager.jpg";
+const hrManagerPhoto = "/assets/management/nte-jonathan/hr-manager.jpg";
+const secretaryPhoto = "/assets/management/asuquo-deborah/secretary.jpg";
 
 const coreValues = [
   { icon: Target, title: 'Excellence', description: 'Delivering the highest quality in every project and service.' },

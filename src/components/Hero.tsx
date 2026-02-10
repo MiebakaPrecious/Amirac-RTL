@@ -38,7 +38,7 @@ const Hero = () => {
           <div className="hidden lg:flex justify-end items-end relative">
             <div className="relative z-10">
               <img
-                src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=800&fit=crop&crop=top"
+                src="/assets/gallery/hero/hero-01.jpg"
                 alt="Construction worker giving thumbs up"
                 className="h-[600px] w-auto object-cover object-top"
               />

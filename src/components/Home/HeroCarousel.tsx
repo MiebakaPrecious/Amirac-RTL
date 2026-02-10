@@ -9,10 +9,10 @@ const HeroCarousel = () => {
   // Get hero images from gallery
   const heroImages = items.filter(item => item.service_group === 'hero');
   
-  // Fallback images if no hero images in database
+  // Fallback images if no hero images in database (local assets)
   const fallbackSlides = [
-    { url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop' },
-    { url: 'https://images.unsplash.com/photo-1581094794329-c8112c4e5190?w=1200&h=800&fit=crop' },
+    { url: '/assets/gallery/hero/hero-01.jpg' },
+    { url: '/assets/gallery/hero/hero-02.jpg' },
   ];
 
   const slides = heroImages.length >= 2 

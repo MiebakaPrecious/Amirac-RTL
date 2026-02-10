@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import aboutImage from '@/assets/gallery/Industrial-valves-Pumps-compressor-service-2.jpeg';
+const aboutImage = "/assets/gallery/industrial-valves/industrial-valves-pumps-compressor-01.jpeg";
 
 const highlights = [
   "Excellent engineering",

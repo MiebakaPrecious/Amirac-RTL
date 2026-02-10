@@ -1,9 +1,3 @@
-// Vite-compatible dynamic imports for all gallery images
-const imageModules = import.meta.glob<{ default: string }>(
-  '/src/assets/gallery/**/*.{jpg,jpeg,png,webp}',
-  { eager: true }
-);
-
 export interface GalleryImage {
   id: string;
   src: string;
@@ -89,7 +83,6 @@ export const serviceGroups: ServiceGroup[] = [
 
 // Priority order for keyword matching (more specific keywords first)
 const serviceKeywordPriority: Array<{ slug: string; keywords: string[] }> = [
-  // More specific matches first
   { slug: 'calibration-pressure-testing', keywords: ['calibration', 'pressure', 'testing'] },
   { slug: 'pneumatic-hydraulic-systems', keywords: ['pneumatic', 'hydraulic'] },
   { slug: 'engine-room-watchkeeping', keywords: ['engine-room', 'watchkeeping', 'watch-keeping'] },
@@ -130,43 +123,44 @@ const getServiceGroupDetails = (slug: string): { title: string; description: str
   };
 };
 
-// Build gallery images from Vite's import.meta.glob
-const buildGalleryImages = (): GalleryImage[] => {
+// Static gallery images defined explicitly (local public assets)
+// These are images stored in public/assets/gallery/ and served as static files
+const buildStaticGalleryImages = (): GalleryImage[] => {
   const images: GalleryImage[] = [];
-  
-  Object.entries(imageModules).forEach(([path, module], index) => {
-    // Extract filename from path
-    const filename = path.split('/').pop() || '';
-    const group = detectServiceGroup(filename);
+
+  // Industrial valves gallery images
+  const industrialValvesImages = [
+    'industrial-valves-pumps-compressor-01.jpeg',
+    'industrial-valves-pumps-compressor-02.jpeg',
+  ];
+  industrialValvesImages.forEach((filename, i) => {
+    const group = 'industrial-valves-pumps-compressors';
     const { title, description } = getServiceGroupDetails(group);
-    
     images.push({
-      id: `vite-${index}-${filename.replace(/\.[^/.]+$/, '')}`,
-      src: module.default,
+      id: `local-industrial-valves-${i}`,
+      src: `/assets/gallery/industrial-valves/${filename}`,
       group,
       title,
       description,
     });
   });
-  
+
   return images;
 };
 
 // Static gallery images built at module load time
-export const staticGalleryImages: GalleryImage[] = buildGalleryImages();
+export const staticGalleryImages: GalleryImage[] = buildStaticGalleryImages();
 
 // Legacy export for backward compatibility
 export const galleryImages = staticGalleryImages;
 
 export const getRandomImages = (count: number, allImages: GalleryImage[] = staticGalleryImages): GalleryImage[] => {
-  // Filter out hero images
   const filteredImages = allImages.filter(img => img.group !== 'hero');
   const shuffled = [...filteredImages].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, Math.min(count, shuffled.length));
 };
 
 export const getImagesByGroup = (allImages: GalleryImage[] = staticGalleryImages): Record<string, GalleryImage[]> => {
-  // Filter out hero images
   const filteredImages = allImages.filter(img => img.group !== 'hero');
   return filteredImages.reduce((acc, image) => {
     if (!acc[image.group]) {

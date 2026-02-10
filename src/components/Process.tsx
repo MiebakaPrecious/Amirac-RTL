@@ -58,7 +58,7 @@ const Process = () => {
           {/* Image */}
           <div className="relative">
             <img
-              src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=700&h=600&fit=crop"
+              src="/assets/gallery/other-training-images/construction-process.jpg"
               alt="Construction process"
               className="w-full h-[600px] object-cover rounded-sm shadow-xl"
             />

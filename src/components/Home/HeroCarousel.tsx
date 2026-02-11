@@ -1,39 +1,29 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useGallery } from '@/contexts/GalleryContext';
+
+const heroSlides = [
+  { url: '/assets/gallery/hero/hero-01.jpg' },
+  { url: '/assets/gallery/hero/hero-02.jpg' },
+];
 
 const HeroCarousel = () => {
-  const { items } = useGallery();
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  // Get hero images from gallery
-  const heroImages = items.filter(item => item.service_group === 'hero');
-  
-  // Fallback images if no hero images in database (local assets)
-  const fallbackSlides = [
-    { url: '/assets/gallery/hero/hero-01.jpg' },
-    { url: '/assets/gallery/hero/hero-02.jpg' },
-  ];
-
-  const slides = heroImages.length >= 2 
-    ? [heroImages[0], heroImages[1]] 
-    : fallbackSlides.map((s, i) => ({ ...s, id: `fallback-${i}`, filename: `hero-${i+1}`, service_group: 'hero', description: null }));
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % 2);
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 6000);
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % 2);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + 2) % 2);
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
 
   return (
     <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
-      {slides.map((slide, index) => (
+      {heroSlides.map((slide, index) => (
         <div
-          key={slide.id || index}
+          key={index}
           className={`absolute inset-0 transition-opacity duration-700 ${
             index === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
@@ -45,7 +35,6 @@ const HeroCarousel = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           
-          {/* Slide Content */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center px-8 max-w-md bg-black/40 backdrop-blur-sm p-6 rounded-lg">
               <h3 className="text-2xl font-heading font-bold text-white mb-4">
@@ -61,7 +50,6 @@ const HeroCarousel = () => {
         </div>
       ))}
       
-      {/* Navigation Arrows */}
       <div className="absolute bottom-6 right-6 flex gap-3">
         <button
           onClick={prevSlide}
@@ -77,9 +65,8 @@ const HeroCarousel = () => {
         </button>
       </div>
       
-      {/* Slide Indicators */}
       <div className="absolute bottom-6 left-6 flex gap-2">
-        {[0, 1].map((index) => (
+        {heroSlides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}

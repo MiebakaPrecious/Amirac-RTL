@@ -12,7 +12,7 @@ export interface ServiceGroup {
   description: string;
 }
 
-// Service group definitions with keywords for filename matching
+// Service group definitions
 export const serviceGroups: ServiceGroup[] = [
   {
     slug: 'industrial-valves-pumps-compressors',
@@ -123,27 +123,85 @@ const getServiceGroupDetails = (slug: string): { title: string; description: str
   };
 };
 
-// Static gallery images defined explicitly (local public assets)
-// These are images stored in public/assets/gallery/ and served as static files
+// ALL gallery images — fully static, no cloud storage dependency
 const buildStaticGalleryImages = (): GalleryImage[] => {
   const images: GalleryImage[] = [];
+  const addGroup = (group: string, folder: string, files: string[]) => {
+    const { title, description } = getServiceGroupDetails(group);
+    files.forEach((filename, i) => {
+      images.push({
+        id: `local-${group}-${i}`,
+        src: `/assets/gallery/${folder}/${filename}`,
+        group,
+        title,
+        description,
+      });
+    });
+  };
 
-  // Industrial valves gallery images
-  const industrialValvesImages = [
+  // Industrial valves
+  addGroup('industrial-valves-pumps-compressors', 'industrial-valves', [
     'industrial-valves-pumps-compressor-01.jpeg',
     'industrial-valves-pumps-compressor-02.jpeg',
-  ];
-  industrialValvesImages.forEach((filename, i) => {
-    const group = 'industrial-valves-pumps-compressors';
-    const { title, description } = getServiceGroupDetails(group);
-    images.push({
-      id: `local-industrial-valves-${i}`,
-      src: `/assets/gallery/industrial-valves/${filename}`,
-      group,
-      title,
-      description,
-    });
-  });
+  ]);
+
+  // Workshop Practice / Engine Room Watch Keeping
+  addGroup('engine-room-watchkeeping', 'workshop-practice', [
+    'engine-room-watch-keeping-01.jpg',
+    'engine-room-watch-keeping-02.jpeg',
+  ]);
+
+  // Lifting Operations / Forklift Training
+  addGroup('forklift-training', 'lifting-operations', [
+    'forklift-training-01.jpeg',
+    'forklift-training-02.jpeg',
+    'forklift-training-03.jpeg',
+  ]);
+
+  // Heavy Duty Machinery
+  addGroup('heavy-duty-machinery', 'heavy-duty-machinery', [
+    'heavy-duty-maintenance-01.jpeg',
+    'heavy-duty-maintenance-02.jpeg',
+    'heavy-duty-maintenance-03.jpg',
+  ]);
+
+  // Marine Machinery & Onboard Ship
+  addGroup('marine-machinery', 'marine-machinery', [
+    'marine-machinery-maintenance-01.jpeg',
+    'onboard-ship-maintenance-01.jpeg',
+    'onboard-ship-maintenance-02.jpeg',
+  ]);
+
+  // Rotating & Static Equipment
+  addGroup('rotating-static-equipment', 'rotating-static-equipment', [
+    'rotating-static-maintenance-01.jpeg',
+    'rotating-static-maintenance-02.jpeg',
+  ]);
+
+  // Mechanical Technician Practice
+  addGroup('mechanical-technician-practice', 'mechanical-technician', [
+    'mechanical-technician-01.jpeg',
+    'mechanical-technician-02.jpg',
+    'mechanical-technician-03.jpg',
+  ]);
+
+  // Welding Training
+  addGroup('welding-training', 'welding-training', [
+    'welding-training-01.jpeg',
+    'welding-training-02.jpeg',
+  ]);
+
+  // Pneumatics & Hydraulics
+  addGroup('pneumatic-hydraulic-systems', 'pneumatic-hydraulic', [
+    'pneumatic-maintenance-01.jpeg',
+  ]);
+
+  // Basic Technical Skill Training
+  addGroup('basic-technical-training', 'basic-technical-training', [
+    'basic-technical-training-01.jpg',
+    'basic-technical-training-02.jpeg',
+    'basic-technical-training-03.jpeg',
+  ]);
 
   return images;
 };

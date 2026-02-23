@@ -54,7 +54,7 @@ const EngineeringServicesForm = ({ onBack }: EngineeringServicesFormProps) => {
       });
 
       if (dbError) {
-        console.error('Database error:', dbError);
+        if (import.meta.env.DEV) console.error('DB error:', dbError.message);
       }
 
       // Send email via EmailJS
@@ -71,7 +71,7 @@ const EngineeringServicesForm = ({ onBack }: EngineeringServicesFormProps) => {
           message: `Project Description: ${validated.projectDescription}\nPreferred Contact: ${validated.preferredContact}`,
         });
       } catch (emailError) {
-        console.error('EmailJS error:', emailError);
+        if (import.meta.env.DEV) console.error('Email error:', emailError);
       }
 
       toast({

@@ -78,7 +78,7 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
       });
 
       if (dbError) {
-        console.error('Database error:', dbError);
+        if (import.meta.env.DEV) console.error('DB error:', dbError.message);
       }
 
       // Send email via EmailJS
@@ -95,7 +95,7 @@ const TrainingRegistrationForm = ({ onBack }: TrainingRegistrationFormProps) => 
           message: validated.message || 'N/A',
         });
       } catch (emailError) {
-        console.error('EmailJS error:', emailError);
+        if (import.meta.env.DEV) console.error('Email error:', emailError);
       }
 
       toast({

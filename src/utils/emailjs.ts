@@ -1,11 +1,12 @@
-import emailjs from '@emailjs/browser';
-
-const EMAILJS_SERVICE_ID = 'service_zjxz5yp';
-const EMAILJS_TEMPLATE_ID = 'template_hnuvmyu';
-const EMAILJS_PUBLIC_KEY = 'ifRg_b89XSwf99zBR';
-
-emailjs.init(EMAILJS_PUBLIC_KEY);
+import { supabase } from "@/integrations/supabase/client";
 
 export const sendEmailJS = async (templateParams: Record<string, string>) => {
-  return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+  const { data, error } = await supabase.functions.invoke("send-contact-email", {
+    body: templateParams,
+  });
+
+  if (error) {
+    throw new Error(error.message || "Failed to send email");
+  }
+  return data;
 };

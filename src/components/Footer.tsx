@@ -11,8 +11,8 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       {/* Main Footer */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="container mx-auto px-5 sm:px-6 lg:px-4 py-12 sm:py-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12">
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
@@ -108,16 +108,16 @@ const Footer = () => {
       
       {/* Bottom Bar */}
       <div className="border-t border-primary-foreground/10">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col items-center text-center md:flex-row md:justify-between md:text-left gap-4">
-            <p className="text-primary-foreground/50 text-sm">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-4 py-5 sm:py-6">
+          <div className="flex flex-col items-center text-center md:flex-row md:justify-between md:text-left gap-3 sm:gap-4">
+            <p className="text-primary-foreground/50 text-xs sm:text-sm">
               © 2026 Amirac Resources and Technologies Ltd. All rights reserved.
             </p>
-            <div className="flex gap-6">
-              <a href="#" className="text-primary-foreground/50 text-sm hover:text-accent transition-colors">
+            <div className="flex gap-5 sm:gap-6">
+              <a href="#" className="text-primary-foreground/50 text-xs sm:text-sm hover:text-accent transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="text-primary-foreground/50 text-sm hover:text-accent transition-colors">
+              <a href="#" className="text-primary-foreground/50 text-xs sm:text-sm hover:text-accent transition-colors">
                 Terms of Service
               </a>
             </div>

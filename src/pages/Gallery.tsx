@@ -70,14 +70,14 @@ const Gallery = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-to-br from-primary/10 to-background">
-        <div className="container mx-auto px-4">
+      <section className="pt-24 sm:pt-32 pb-14 sm:pb-20 bg-gradient-to-br from-primary/10 to-background">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-4">
           <div className="max-w-4xl mx-auto text-center">
             <span className="section-label">Our Work</span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-primary mt-4 mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-primary mt-3 sm:mt-4 mb-5 sm:mb-6 leading-tight">
               Project Gallery
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
               Explore our portfolio of completed projects and services
             </p>
           </div>
@@ -85,10 +85,10 @@ const Gallery = () => {
       </section>
 
       {/* Gallery Content */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
+      <section className="py-14 sm:py-20">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-4">
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="aspect-square bg-muted animate-pulse rounded-lg" />
               ))}
@@ -99,14 +99,14 @@ const Gallery = () => {
             </div>
           ) : (
             sortedGroups.map(({ slug, title, images }) => (
-              <div key={slug} className="mb-16 last:mb-0">
-                <h2 className="text-2xl font-heading font-bold text-primary mb-6 border-l-4 border-primary pl-4">
+              <div key={slug} className="mb-12 sm:mb-16 last:mb-0">
+                <h2 className="text-xl sm:text-2xl font-heading font-bold text-primary mb-5 sm:mb-6 border-l-4 border-primary pl-3 sm:pl-4 leading-tight">
                   {title}
-                  <span className="ml-3 text-sm font-normal text-muted-foreground">
+                  <span className="ml-2 sm:ml-3 text-xs sm:text-sm font-normal text-muted-foreground block sm:inline mt-1 sm:mt-0">
                     ({images.length} {images.length === 1 ? 'image' : 'images'})
                   </span>
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                   {images.map((item) => (
                     <div
                       key={item.id}
@@ -119,9 +119,9 @@ const Gallery = () => {
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                        <p className="text-white text-sm font-medium">{item.title}</p>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 sm:translate-y-full sm:group-hover:translate-y-0 transition-transform duration-300">
+                        <p className="text-white text-xs sm:text-sm font-medium leading-snug line-clamp-2">{item.title}</p>
                       </div>
                     </div>
                   ))}

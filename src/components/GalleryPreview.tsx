@@ -49,28 +49,28 @@ const GalleryPreview = () => {
   }, [loading, stablePreviewImages]);
 
   return (
-    <section className="py-20 bg-muted/30">
-      <div className="container mx-auto px-4">
+    <section className="py-14 sm:py-20 bg-muted/30">
+      <div className="container mx-auto px-5 sm:px-6 lg:px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10 sm:mb-12">
           <span className="section-label">Our Work</span>
-          <h2 className="text-4xl md:text-5xl font-heading font-bold text-primary mt-4 mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-primary mt-3 sm:mt-4 mb-3 sm:mb-4 leading-tight">
             Project Gallery
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
             Explore our portfolio of completed projects across various industrial sectors
           </p>
         </div>
 
-        {/* Gallery Grid - 3 cols desktop, 2 tablet, 1 mobile */}
+        {/* Gallery Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mb-8 sm:mb-10">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="aspect-[4/3] bg-muted animate-pulse rounded-lg" />
             ))}
           </div>
         ) : previewImages.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mb-8 sm:mb-10">
             {previewImages.map((item) => (
               <FlipCard key={item.id} item={item} />
             ))}
@@ -85,7 +85,7 @@ const GalleryPreview = () => {
         <div className="text-center">
           <Link
             to="/gallery"
-            className="inline-block px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors"
+            className="inline-block w-full sm:w-auto px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors text-center"
           >
             View Full Gallery →
           </Link>

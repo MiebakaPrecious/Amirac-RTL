@@ -6,30 +6,30 @@ const ServicesPreview = () => {
   const previewServices = services.slice(0, 6);
 
   return (
-    <section className="py-20 bg-background">
-      <div className="container mx-auto px-4">
+    <section className="py-14 sm:py-20 bg-background">
+      <div className="container mx-auto px-5 sm:px-6 lg:px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10 sm:mb-12">
           <span className="section-label">What We Do</span>
-          <h2 className="text-4xl md:text-5xl font-heading font-bold text-primary mt-4 mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-primary mt-3 sm:mt-4 mb-3 sm:mb-4 leading-tight">
             Our Services
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
             Comprehensive engineering solutions for marine and industrial sectors
           </p>
         </div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 mb-8 sm:mb-10">
           {previewServices.map((service, index) => (
             <div
               key={index}
-              className="group bg-card p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-lg"
+              className="group bg-card p-5 sm:p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-lg"
             >
-              <div className="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary transition-colors">
-                <service.icon className="w-7 h-7 text-primary group-hover:text-primary-foreground transition-colors" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary transition-colors">
+                <service.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary group-hover:text-primary-foreground transition-colors" />
               </div>
-              <h3 className="text-xl font-heading font-bold text-foreground mb-3">
+              <h3 className="text-lg sm:text-xl font-heading font-bold text-foreground mb-2 sm:mb-3 leading-snug">
                 {service.title}
               </h3>
               <p className="text-muted-foreground text-sm leading-relaxed">
@@ -43,7 +43,7 @@ const ServicesPreview = () => {
         <div className="text-center">
           <Link
             to="/services"
-            className="inline-block px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors"
+            className="inline-block w-full sm:w-auto px-6 py-3 border-2 border-primary text-primary font-semibold rounded-md hover:bg-primary hover:text-primary-foreground transition-colors text-center"
           >
             Learn More →
           </Link>

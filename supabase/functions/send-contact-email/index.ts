@@ -3,6 +3,7 @@ import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0/cors";
 const EMAILJS_SERVICE_ID = Deno.env.get("EMAILJS_SERVICE_ID");
 const EMAILJS_TEMPLATE_ID = Deno.env.get("EMAILJS_TEMPLATE_ID");
 const EMAILJS_PUBLIC_KEY = Deno.env.get("EMAILJS_PUBLIC_KEY");
+const EMAILJS_PRIVATE_KEY = Deno.env.get("EMAILJS_PRIVATE_KEY");
 
 // Simple in-memory rate limit (per cold start). Best-effort abuse mitigation.
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -100,6 +101,7 @@ Deno.serve(async (req) => {
         service_id: EMAILJS_SERVICE_ID,
         template_id: EMAILJS_TEMPLATE_ID,
         user_id: EMAILJS_PUBLIC_KEY,
+        accessToken: EMAILJS_PRIVATE_KEY,
         template_params,
       }),
     });

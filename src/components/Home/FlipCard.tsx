@@ -25,8 +25,8 @@ const FlipCard = ({ item }: FlipCardProps) => {
   };
 
   return (
-    <div 
-      className="perspective-1000 h-72 cursor-pointer"
+    <div
+      className="perspective-1000 h-64 sm:h-72 cursor-pointer"
       onClick={handleCardClick}
     >
       <div

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-const logo = "/assets/logos/logo.svg";
+const logo = "/assets/logos/amirac-logo.png";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -37,16 +37,13 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <Link to="/" className="flex items-center min-w-0" aria-label="Amirac Resources and Technologies Ltd - Home">
             <img
               src={logo}
               alt="Amirac Resources and Technologies Ltd"
-              className="h-9 w-9 sm:h-10 sm:w-10 object-contain flex-shrink-0"
+              className="h-10 sm:h-12 lg:h-14 w-auto object-contain flex-shrink-0"
+              fetchPriority="high"
             />
-            <div className="flex flex-col min-w-0">
-              <span className="text-base sm:text-lg font-heading font-bold text-primary tracking-wide leading-none">AMIRAC</span>
-              <span className="text-[7px] sm:text-[8px] font-semibold text-muted-foreground tracking-wider leading-tight mt-0.5 truncate">RESOURCES & TECHNOLOGIES</span>
-            </div>
           </Link>
 
           {/* Desktop Navigation */}

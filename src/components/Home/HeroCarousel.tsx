@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const heroSlides = [
   { url: '/assets/gallery/hero/hero-01.jpg' },
   { url: '/assets/gallery/hero/hero-02.jpg' },
+  { url: '/assets/gallery/hero/hero-03.jpg' },
 ];
 
 const HeroCarousel = () => {

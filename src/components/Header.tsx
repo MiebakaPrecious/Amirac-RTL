@@ -42,7 +42,9 @@ const Header = () => {
               src={logo}
               alt="Amirac Resources and Technologies Ltd"
               className="h-10 sm:h-12 lg:h-14 w-auto object-contain flex-shrink-0"
+              style={{ filter: 'none', opacity: 1, mixBlendMode: 'normal' }}
               fetchPriority="high"
+              decoding="async"
             />
           </Link>
 
